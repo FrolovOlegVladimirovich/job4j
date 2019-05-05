@@ -11,8 +11,8 @@ public class Calculate {
      * Основная программа main
      * @param args массив строковых аргументов
     */
-    public static void main (String[] args) {
-        System.out.println ("Hello world!");
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
     }
     
     /**
