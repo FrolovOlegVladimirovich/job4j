@@ -10,7 +10,6 @@ public class Calculate {
     /**
      * Основная программа main
      * @param args массив строковых аргументов
-     * @return
     */
     public static void main (String[] args) {
         System.out.println ("Hello world!");
