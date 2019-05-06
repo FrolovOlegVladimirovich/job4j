@@ -14,9 +14,9 @@ import static org.junit.Assert.assertThat;
  * @since 05.05.2019
  */
 public class CalculateTest {
-/**
- * Test add
- */
+    /**
+     * Test add
+     */
     @Test
     public void whenAddOneToOneThenTwo() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -24,9 +24,9 @@ public class CalculateTest {
         Calculate.main(null);
         assertThat(out.toString(), is("Hello world!\n"));
     }
-/**
- * Test echo
- */
+    /**
+     * Test echo
+     */
     @Test
     public void whenTakeNameThenThreeEchoPlusName() {
         String input = "Oleg Frolov";
