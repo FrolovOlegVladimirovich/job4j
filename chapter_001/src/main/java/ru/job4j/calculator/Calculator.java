@@ -6,16 +6,44 @@ package ru.job4j.calculator;
  * @version 1.0
  */
 public class Calculator {
-    public double add(double first, double second) { // сложение
+
+    /**
+     * Сложение.
+     * @param first Число №1.
+     * @param second Число №2.
+     * @return Результат сложения числа №1 и числа №2.
+     */
+    public double add(double first, double second) {
         return first + second;
     }
-    public double subtract(double first, double second) { // вычитание
+
+    /**
+     * Вычитание.
+     * @param first Число №1.
+     * @param second Число №2.
+     * @return Результат разности числа №1 и числа №2.
+     */
+    public double subtract(double first, double second) {
         return first - second;
     }
-    public double div(double first, double second) { // деление
+
+    /**
+     * Деление.
+     * @param first Число №1.
+     * @param second Число №2.
+     * @return Результат деления числа №1 на число №2.
+     */
+    public double div(double first, double second) {
         return first / second;
     }
-    public double multiple(double first, double second) { // умножение
+
+    /**
+     * Умножение.
+     * @param first Число №1.
+     * @param second Число №2.
+     * @return Результат умножения числа №1 на число №2.
+     */
+    public double multiple(double first, double second) {
         return first * second;
     }
 }
