@@ -16,8 +16,8 @@ public class SqArea {
      * @return Площадь прямоугольника.
      */
     public static int square(int p, int k) {
-        int h = (p/2)/(k+1);
-        int w = h*k;
-        return h*w;
+        int h = (p / 2) / (k + 1);
+        int w = h * k;
+        return h * w;
     }
 }
