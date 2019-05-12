@@ -50,7 +50,7 @@ public class MultiMaxTest {
         int result = check.max(4, 2, 5);
         assertThat(result, is(5));
     }
-    
+
     @Test
     /**
      * Если все числа одинаковые.
