@@ -9,7 +9,7 @@ package ru.job4j.array;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 17.05.2019
- * @version 1.0
+ * @version 1.1
  */
 public class Check {
     public boolean mono(boolean[] data) {
@@ -18,9 +18,7 @@ public class Check {
 
         for (int i = 1; i != data.length; i++) {
 
-            if (data[i] == first) {
-                result = true;
-            } else {
+            if (data[i] != first) {
                 result = false;
                 break;
             }
