@@ -15,4 +15,24 @@ public class ArrayDuplicateTest {
         assertThat(result, is(expect));
 
     }
+
+    @Test
+    public void whenRemoveDuplicatesThenArrayWithoutDuplicates2() {
+        ArrayDuplicate data = new ArrayDuplicate();
+        String[] text = {"Привет", "Привет", "Привет", "Привет", "Привет", "Привет"};
+        String[] result = data.remove(text);
+        String[] expect = {"Привет"};
+        assertThat(result, is(expect));
+
+    }
+
+    @Test
+    public void whenRemoveDuplicatesThenArrayWithoutDuplicates3() {
+        ArrayDuplicate data = new ArrayDuplicate();
+        String[] text = {"Привет"};
+        String[] result = data.remove(text);
+        String[] expect = {"Привет"};
+        assertThat(result, is(expect));
+
+    }
 }

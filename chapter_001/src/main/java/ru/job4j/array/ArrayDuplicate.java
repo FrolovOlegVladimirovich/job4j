@@ -7,7 +7,7 @@ import java.util.Arrays;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 18.05.2019
- * @version 1.0
+ * @version 2.0
  */
 public class ArrayDuplicate {
 
@@ -24,22 +24,23 @@ public class ArrayDuplicate {
      * @return возвращает массив из строковых элементов, очищенный от дубликатов.
      */
     public String[] remove(String[] array) {
-        int last = 1;
 
         for (int i = 0; i != array.length; i++) {
-            int j = 1 + i;
-
-            for (; j <= (array.length - last); j++) {
+            for (int j = array.length - 1; j != i; j--) {
 
                 if (array[i].equals(array[j])) {
-                    String tmp = array[j];
-                    array[j] = array[array.length - last];
-                    array[array.length - last] = tmp;
-                    last++;
+                    if (j == array.length - 1) {
+                        array = Arrays.copyOf(array, array.length - 1);
+
+                    } else {
+                        String tmp = array[j];
+                        array[j] = array[array.length - 1];
+                        array[array.length - 1] = tmp;
+                        array = Arrays.copyOf(array, array.length - 1);
+                    }
                 }
             }
         }
-        array = Arrays.copyOf(array, (array.length - (last - 1)));
         return array;
     }
 }
