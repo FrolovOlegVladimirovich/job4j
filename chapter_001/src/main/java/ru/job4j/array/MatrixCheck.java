@@ -8,7 +8,7 @@ package ru.job4j.array;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 18.05.2019
- * @version 1.1
+ * @version 1.2
  */
 public class MatrixCheck {
 
@@ -22,17 +22,13 @@ public class MatrixCheck {
         boolean resultRight = true;
         boolean firstLeft = data[0][0];
         boolean firstRight = data[0][data.length - 1];
-
-        for (int i = 1; i != data.length; i++) {
+        int i = 1;
+        int j = data.length - 2;
+        for (; i != data.length && j >= 0; i++, j--) {
             if (data[i][i] != firstLeft) {
                 resultLeft = false;
                 break;
             }
-        }
-
-        int i = 1;
-        int j = data.length - 2;
-        for (; i != data.length && j >= 0; i++, j--) {
             if (data[i][j] != firstRight) {
                 resultRight = false;
                 break;
