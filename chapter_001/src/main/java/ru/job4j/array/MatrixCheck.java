@@ -11,41 +11,38 @@ package ru.job4j.array;
  * @version 1.1
  */
 public class MatrixCheck {
+
     /**
-     * Создается два одномерных массива diagonalLeft[] и diagonalRight[].
-     *
-     * diagonalLeft[] содержит значения по первой диагонали из матрицы data[][].
-     * diagonalRight[] содержит значения по второй диагонали из матрицы data[][].
-     *
-     * Используется метод mono из класса Check для проверки всех значений каждой диагонали на true/false.
-     *
      * @param data - двухмерный массив с булевыми значениями.
      * @return возвращает результат проверки двух диагоналей на true/false.
      */
     public boolean mono(boolean[][] data) {
         boolean result = true;
+        boolean resultLeft = true;
+        boolean resultRight = true;
+        boolean firstLeft = data[0][0];
+        boolean firstRight = data[0][data.length - 1];
 
-        boolean[] diagonalLeft = new boolean[data.length];
-        boolean[] diagonalRight = new boolean[data.length];
-
-        for (int i = 0; i != data.length; i++) {
-            diagonalLeft[i] = data[i][i];
+        for (int i = 1; i != data.length; i++) {
+            if (data[i][i] != firstLeft) {
+                resultLeft = false;
+                break;
+            }
         }
-        int i = 0;
-        int j = data.length - 1;
+
+        int i = 1;
+        int j = data.length - 2;
         for (; i != data.length && j >= 0; i++, j--) {
-            diagonalRight[i] = data[i][j];
+            if (data[i][j] != firstRight) {
+                resultRight = false;
+                break;
+            }
         }
-
-        Check checkLeft = new Check();
-        Check checkRight = new Check();
-
-        boolean resultLeft = checkLeft.mono(diagonalLeft);
-        boolean resultRight = checkRight.mono(diagonalRight);
 
         if (!resultLeft || !resultRight) {
             result = false;
         }
+
         return result;
     }
 }
