@@ -55,7 +55,6 @@ public class Paint {
                 2 * height - 1,
                 (row, column) -> row >= height - column - 1 && row + height - 1 >= column
         );
-
     }
 
     /**

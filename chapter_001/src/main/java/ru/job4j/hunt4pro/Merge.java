@@ -1,5 +1,11 @@
 package ru.job4j.hunt4pro;
 
+/**
+ * Объединяет два масиива в один с сортировкой значений от меньшего к большему.
+ * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
+ * @since 22.05.2019
+ * @version 1.0
+ */
 public class Merge {
     public int[] merge(int[] left, int[] right) {
         int[] rsl = new int[left.length + right.length];

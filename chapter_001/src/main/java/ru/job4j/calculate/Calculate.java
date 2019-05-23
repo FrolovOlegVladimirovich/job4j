@@ -5,22 +5,23 @@ package ru.job4j.calculate;
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 05.05.2019
  * @version 1.0
-*/
+ */
 public class Calculate {
+
     /**
      * Основная программа main
      * @param args массив строковых аргументов
-    */
+     */
     public static void main(String[] args) {
         System.out.println("Hello world!");
     }
-    
+
     /**
      * Method echo.
      * @param name Your name.
      * @return Echo plus your name.
-    */
+     */
     public String echo(String name) {
-    return "Echo, echo, echo : " + name;
-        }
+        return "Echo, echo, echo : " + name;
+    }
 }

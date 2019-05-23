@@ -7,6 +7,7 @@ package ru.job4j.array;
  * @version 1.0
  */
 public class Square {
+
     /**
      * Заполнение массива числами от 1 до bound, возведенными в квадрат.
      * @param bound количество элементов массива result

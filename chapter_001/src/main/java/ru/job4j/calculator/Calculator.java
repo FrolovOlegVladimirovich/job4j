@@ -1,4 +1,5 @@
 package ru.job4j.calculator;
+
 /**
  * Класс для простейшего калькулятора (функции сложения, вычитания, деления, умножения).
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)

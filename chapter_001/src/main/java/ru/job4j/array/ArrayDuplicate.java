@@ -27,7 +27,6 @@ public class ArrayDuplicate {
         int last = 0;
         for (int i = 0; i < array.length - last; i++) {
             for (int j = array.length - 1 - last; j != i; j--) {
-
                 if (array[i].equals(array[j])) {
                         String tmp = array[j];
                         array[j] = array[array.length - 1 - last];

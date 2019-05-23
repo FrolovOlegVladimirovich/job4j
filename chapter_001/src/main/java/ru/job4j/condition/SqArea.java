@@ -11,13 +11,13 @@ public class SqArea {
 
     /**
      * Метод для вычисления площади прямоугольника при известных значениях периметра и значения разницы между шириной и высотой.
-     * @param p значение периметра прямоугольника.
-     * @param k - значение: ширина больше высоты в k раз.
+     * @param perimeter значение периметра прямоугольника.
+     * @param ratio - соотношение: ширина больше высоты в ratio раз.
      * @return Площадь прямоугольника.
      */
-    public static int square(int p, int k) {
-        int h = (p / 2) / (k + 1);
-        int w = h * k;
-        return h * w;
+    public static int square(int perimeter, int ratio) {
+        int height = (perimeter / 2) / (ratio + 1);
+        int length = height * ratio;
+        return height * length;
     }
 }
