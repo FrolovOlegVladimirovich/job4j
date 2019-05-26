@@ -29,7 +29,18 @@ public class MergeTest {
     }
 
     @Test
-    public void whenLeftLess() {
+    public void whenAscNoOrder() {
+        Merge algo = new Merge();
+        int[] expect = {1, 2, 3, 4};
+        int[] result = algo.merge(
+                new int[] {1, 3},
+                new int[] {2, 4}
+        );
+        assertThat(result, is(expect));
+    }
+
+    @Test
+    public void whenLeftGreat() {
         Merge algo = new Merge();
         int[] expect = {1, 2, 3, 3, 4};
         int[] result = algo.merge(
@@ -40,7 +51,7 @@ public class MergeTest {
     }
 
     @Test
-    public void whenLeftGreat() {
+    public void whenLeftLess() {
         Merge algo = new Merge();
         int[] expect = {1, 2, 3, 4, 4};
         int[] result = algo.merge(
@@ -62,12 +73,12 @@ public class MergeTest {
     }
 
     @Test
-    public void whenAscNoOrder() {
+    public void whenRightEmpty() {
         Merge algo = new Merge();
-        int[] expect = {1, 2, 3, 4};
+        int[] expect = {1, 3};
         int[] result = algo.merge(
                 new int[] {1, 3},
-                new int[] {2, 4}
+                new int[] {}
         );
         assertThat(result, is(expect));
     }

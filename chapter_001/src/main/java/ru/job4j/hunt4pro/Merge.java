@@ -1,33 +1,33 @@
 package ru.job4j.hunt4pro;
 
 /**
- * Объединяет два масиива в один с сортировкой значений от меньшего к большему.
+ * Объединяет два отсортированных масcива в один алгоритмом сортировки слиянием.
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 22.05.2019
- * @version 1.0
+ * @version 2.0
+ *
+ * i - итератор в массиве left
+ * j - итератор в массиве right
+ * k - итератор в массиве array
  */
 public class Merge {
-    public int[] merge(int[] left, int[] right) {
-        int[] rsl = new int[left.length + right.length];
-        int i = 0;
-        int j = 0;
-        if (rsl.length != 0) {
-            for (; i < left.length; i++, j++) {
-                rsl[i] = left[i];
-            }
-            for (int k = 0; k < right.length && j < rsl.length; k++, j++) {
-                rsl[j] = right[k];
-            }
-            for (int k = 1; (rsl.length - k) != 1; k++) {
-                for (int l = 0; l < rsl.length - k; l++) {
-                    if (rsl[l] > rsl[l + 1]) {
-                        int tmp = rsl[l];
-                        rsl[l] = rsl[l + 1];
-                        rsl[l + 1] = tmp;
-                    }
-                }
-            }
-        }
-        return rsl;
+  public int[] merge(int[] left, int[] right) {
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int length = left.length + right.length;
+    int[] array = new int[length];
+    while (k < length) {
+      if (i == left.length) {
+        array[k++] = right[j++];
+      } else if (j == right.length) {
+        array[k++] = left[i++];
+      } else if (left[i] <= right[j]) {
+        array[k++] = left[i++];
+      } else {
+        array[k++] = right[j++];
+      }
     }
+    return array;
+  }
 }
