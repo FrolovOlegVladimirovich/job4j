@@ -18,7 +18,7 @@ public class Point {
      * @param first координата точки по оси x.
      * @param second координата точки по оси y.
      */
-    public Point (int first, int second) {
+    public Point(int first, int second) {
         this.x = first;
         this.y = second;
     }
@@ -31,7 +31,7 @@ public class Point {
      * @param y координата точки по оси y.
      * @param z координата точки по оси z.
      */
-    public Point (int x, int y, int z) {
+    public Point(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -61,7 +61,7 @@ public class Point {
      * @param that координаты точки 2.
      * @return Расстояние между точками 1 и 2 в системе координат xyz.
      */
-    public double distance3d (Point that) {
+    public double distance3d(Point that) {
         return Math.sqrt(Math.pow(that.x - this.x, 2) + Math.pow(that.y - this.y, 2) + Math.pow(that.z - this.z, 2));
     }
 
