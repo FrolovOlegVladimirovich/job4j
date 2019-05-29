@@ -9,18 +9,18 @@ import static org.junit.Assert.*;
 
 
 public class TriangleTest {
+
     @Test
     /**
      * Тест: вычисление площади треугольника.
      */
     public void whenAreaSetThreePointsThenTriangleArea() {
-        // Создаем объект треугольник.
-        Triangle triangle = new Triangle();
-        // Вычисляем площадь.
-        double result = triangle.area(0, 0, 0, 2, 2, 0);
-        // Задаем ожидаемый результат.
+        Point one = new Point(0, 0);
+        Point two = new Point(0, 2);
+        Point three = new Point(2, 0);
+        Triangle triangle = new Triangle(one, two, three);
+        double result = triangle.area();
         double expected = 2D;
-        //Проверяем результат и ожидаемое значение.
         assertThat(result, closeTo(expected, 0.1));
     }
 }
