@@ -31,7 +31,7 @@ public class Tracker {
      * @return возвращает уникальный ID для заявки.
      */
     public String generateId() {
-        Long id =  System.currentTimeMillis() * (long) (Math.random() * 101);
+        Long id =  System.currentTimeMillis() * (long) (1 + Math.random() * 101);
         return id.toString();
     }
 
@@ -111,5 +111,12 @@ public class Tracker {
             }
         }
         return result;
+    }
+
+    /**
+     * Возвращает количество заявок в базе.
+     */
+    public int getPosition() {
+        return position;
     }
 }

@@ -35,6 +35,12 @@ public class Item {
         this.time = time;
     }
 
+    public Item(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
+        this.time = System.currentTimeMillis();
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -85,5 +91,16 @@ public class Item {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, desc, time);
+    }
+
+    @Override
+    public String toString() {
+        return  "\n\nID: " + id
+                +
+                "\nИмя: " + name
+                +
+                "\nОписание: " + desc
+                +
+                "\nСоздана: " + time;
     }
 }
