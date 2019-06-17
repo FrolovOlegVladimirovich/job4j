@@ -5,7 +5,7 @@ package ru.job4j.tracker;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 06.06.2019
- * @version 3.0
+ * @version 3.1
  */
 public class StartUI {
     private final Input input;
@@ -34,7 +34,8 @@ public class StartUI {
         menu.fillActions();
         do {
             menu.show();
-            key = Integer.valueOf(input.ask("Введите пункт меню: "));
+            menu.setRanges();
+            key = input.ask("Введите пункт меню: ", menu.getRanges());
             menu.select(key);
         }
         while (key != 6);
@@ -44,6 +45,6 @@ public class StartUI {
      * Запуск программы.
      */
     public static void main(String[] args) {
-        new StartUI(new ConsoleInput(), new Tracker()).init();
+        new StartUI(new ValidateInput(), new Tracker()).init();
     }
 }

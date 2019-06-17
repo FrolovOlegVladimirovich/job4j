@@ -5,8 +5,21 @@ package ru.job4j.tracker;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 06.06.2019
- * @version 1.0
+ * @version 2.0
  */
 public interface Input {
+    /**
+     * Получение значения типа String, введенного в консоль пользователем.
+     * @param question - запрос пользователю.
+     * @return Значение типа String.
+     */
     String ask(String question);
+
+    /**
+     * Получение значения типа int, введенного пользователем.
+     * @param question - запрос пользователю.
+     * @param range - массив с диапазоном принимаемых значений от пользователя.
+     * @return Значение типа int.
+     */
+    int ask(String question, int[] range);
 }

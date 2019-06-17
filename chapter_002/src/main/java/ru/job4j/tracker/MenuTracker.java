@@ -7,12 +7,13 @@ import java.util.Arrays;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 14.06.2019
- * @version 1.1
+ * @version 1.2
  */
 public class MenuTracker {
     private Input input;
     private Tracker tracker;
     private UserAction[] actions = new UserAction[7];
+    private int[] ranges = new int[this.actions.length];
     private int position;
 
     /**
@@ -52,11 +53,7 @@ public class MenuTracker {
      * @param key ключ операции
      */
     public void select(int key) {
-        if (key < actions.length) {
-            this.actions[key].execute(this.input, this.tracker);
-        } else {
-            System.out.println("Пункт меню под номером " + key + " отсутствует!");
-        }
+        this.actions[key].execute(this.input, this.tracker);
     }
 
     /**
@@ -72,6 +69,25 @@ public class MenuTracker {
             }
         }
         System.out.println();
+    }
+
+    /**
+     * Сетер присваивает значения пунктов меню в массив ranges.
+     * Массив ranges используется в качестве диапазона значений
+     * для проверки введенных пользователем пунктов меню.
+     */
+    public void setRanges() {
+        for (int i = 0; i != this.actions.length; i++) {
+            this.ranges[i] = i;
+        }
+    }
+
+    /**
+     * Гетер получает массив с диапазоном значений пунктов меню.
+     * @return Массив.
+     */
+    public int[] getRanges() {
+        return this.ranges;
     }
 
     /**
