@@ -32,10 +32,9 @@ public class StubInput implements Input {
                 break;
             }
         }
-        if (exist) {
-            return key;
-        } else {
+        if (!exist) {
             throw new MenuOutException("Выход из диапазона заданных значений!");
         }
+        return key;
     }
 }
