@@ -5,7 +5,7 @@ package ru.job4j.tracker;
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 06.06.2019
- * @version 3.1
+ * @version 3.2
  */
 public class StartUI {
     private final Input input;
@@ -45,6 +45,6 @@ public class StartUI {
      * Запуск программы.
      */
     public static void main(String[] args) {
-        new StartUI(new ValidateInput(), new Tracker()).init();
+        new StartUI(new ValidateInput(new ConsoleInput()), new Tracker()).init();
     }
 }
