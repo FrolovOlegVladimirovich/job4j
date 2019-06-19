@@ -10,6 +10,7 @@ package ru.job4j.tracker;
 public class StartUI {
     private final Input input;
     private final Tracker tracker;
+    private boolean exit = true;
 
     /**
      * Конструктор класса с параметрами.
@@ -29,16 +30,22 @@ public class StartUI {
      *
      */
     public void init() {
-        int key;
-        MenuTracker menu = new MenuTracker(this.input, this.tracker);
+        MenuTracker menu = new MenuTracker(this.input, this.tracker, this);
         menu.fillActions();
         do {
             menu.show();
             menu.setRanges();
-            key = input.ask("Введите пункт меню: ", menu.getRanges());
-            menu.select(key);
+            menu.select(input.ask("Введите пункт меню: ", menu.getRanges()));
         }
-        while (key != 6);
+        while (exit);
+    }
+
+    /**
+     * Меняет флаг в переменной для выхода из цикла в init().
+     * Реализует выход из программы.
+     */
+    public void stop() {
+        this.exit = false;
     }
 
     /**
