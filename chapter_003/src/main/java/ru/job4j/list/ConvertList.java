@@ -1,17 +1,20 @@
 package ru.job4j.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Конвертация ArrayList в двухмерный массив.
+ * Конвертер ArrayList в различные типы данных.
  *
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  * @since 02.08.2019
  * @version 1.0
  */
-public class ConvertList2Array {
+public class ConvertList {
 
     /**
+     * Конвертация ArrayList в двухмерный массив.
+     *
      * Метод равномерно разделяет list на количество строк двухмерного массива rows,
      * заполняя оставшиеся пустые значения нулями.
      *
@@ -37,6 +40,22 @@ public class ConvertList2Array {
                 iRow++;
                 iCell = 0;
                 result[iRow][iCell++] = index;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Конвертация ArrayList int[] в ArrayList Integer.
+     *
+     * @param list Коллекция содержит int[].
+     * @return ArrayList Integer.
+     */
+    public List<Integer> toList(List<int[]> list) {
+        List<Integer> result = new ArrayList<>();
+        for (int[] array : list) {
+            for (int element : array) {
+                result.add(element);
             }
         }
         return result;
