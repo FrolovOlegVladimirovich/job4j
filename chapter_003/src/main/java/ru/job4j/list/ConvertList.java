@@ -1,6 +1,8 @@
 package ru.job4j.list;
 
+import ru.job4j.search.Person;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,6 +59,20 @@ public class ConvertList {
             for (int element : array) {
                 result.add(element);
             }
+        }
+        return result;
+    }
+
+    /**
+     * Конвертация List Person в HashMap Integer, Person.
+     * @param list Коллекция Person.
+     * @return HashMap Integer, Person.
+     */
+    public HashMap<Integer, Person> toMap(List<Person> list) {
+        HashMap<Integer, Person> result = new HashMap<>();
+        for (Person person : list) {
+            Integer id = Integer.parseInt(person.getId());
+            result.put(id, person);
         }
         return result;
     }

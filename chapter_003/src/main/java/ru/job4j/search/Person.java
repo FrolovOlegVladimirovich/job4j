@@ -8,6 +8,7 @@ package ru.job4j.search;
  * @version 1.0
  */
 public class Person {
+    private String id;
     private String name;
     private String surename;
     private String phone;
@@ -18,6 +19,20 @@ public class Person {
         this.surename = surename;
         this.phone = phone;
         this.adress = adress;
+    }
+
+    public Person(String id, String name, String adress) {
+        this.id = id;
+        this.name = name;
+        this.adress = adress;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

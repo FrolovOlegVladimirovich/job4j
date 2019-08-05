@@ -1,7 +1,10 @@
 package ru.job4j.list;
 
 import org.junit.Test;
+import ru.job4j.search.Person;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -155,6 +158,27 @@ public class ConvertListTest {
                 new int[]{12, 13}
         ));
         List<Integer> expect = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+        assertThat(result, is(expect));
+    }
+
+    /**
+     * Тест конвертации List Person в HashMap Integer, Person.
+     */
+    @Test
+    public void whenListWith3PersonsThenMapWith3Elements() {
+        ConvertList list = new ConvertList();
+        Person one = new Person("111", "Petr", "Russia, Bryansk");
+        Person two = new Person("123", "Oleg", "Russia, Moscow");
+        Person three = new Person("222", "Joe", "USA, New York");
+        HashMap<Integer, Person> result = list.toMap(Arrays.asList(
+                one,
+                two,
+                three
+        ));
+        HashMap<Integer, Person> expect = new HashMap<>();
+        expect.put(111, one);
+        expect.put(123, two);
+        expect.put(222, three);
         assertThat(result, is(expect));
     }
 }
