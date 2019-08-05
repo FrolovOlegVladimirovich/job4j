@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -62,21 +65,21 @@ public class StartUITest {
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        Input input = new StubInput(new String[]{"0", "test name", "test desc", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("0", "test name", "test desc", "6")));
         new StartUI(input, tracker).init();
-        assertThat(tracker.findAll()[0].getName(), is("test name"));
+        assertThat(tracker.findAll().get(0).getName(), is("test name"));
     }
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
-        Input input = new StubInput(new String[]{"2", item1.getId(), "new test name", "new desc", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("2", item1.getId(), "new test name", "new desc", "6")));
         new StartUI(input, tracker).init();
         assertThat(tracker.findById(item1.getId()).getName(), is("new test name"));
     }
 
     @Test
     public void whenDeleteItem() {
-        Input input = new StubInput(new String[]{"3", item1.getId(), "", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("3", item1.getId(), "", "6")));
         new StartUI(input, tracker).init();
         Item result = null;
         assertThat(tracker.findById(item1.getId()), is(result));
@@ -84,14 +87,14 @@ public class StartUITest {
 
     @Test
     public void whenCancelDeleteThenTrackerNoDelete() {
-        Input input = new StubInput(new String[]{"3", item1.getId(), "N", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("3", item1.getId(), "N", "6")));
         new StartUI(input, tracker).init();
         assertThat(tracker.findById(item1.getId()).getName(), is("test name"));
     }
 
     @Test
     public void whenShowAllItems() {
-        Input input = new StubInput(new String[]{"1", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("1", "6")));
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(new StringBuilder()
                         .append(this.menu)
@@ -125,7 +128,7 @@ public class StartUITest {
 
     @Test
     public void whenFindItemById() {
-        Input input = new StubInput(new String[]{"4", item1.getId(), "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("4", item1.getId(), "6")));
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(new StringBuilder()
                         .append(this.menu)
@@ -145,7 +148,7 @@ public class StartUITest {
 
     @Test
     public void whenFindItemsByName() {
-        Input input = new StubInput(new String[] {"5", "test name", "6"});
+        Input input = new StubInput(new ArrayList<>(Arrays.asList("5", "test name", "6")));
         new StartUI(input, tracker).init();
         assertThat(new String(out.toByteArray()), is(new StringBuilder()
                         .append(this.menu)

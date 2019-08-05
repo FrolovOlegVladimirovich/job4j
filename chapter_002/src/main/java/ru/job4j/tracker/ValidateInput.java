@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * Наследник класса ConsoleInput, переопределяющий метод ask.
  * Реализует проверку введенных пользователем данных на наличие ошибок.
@@ -28,11 +30,11 @@ public class ValidateInput implements Input {
      * Метод, проверяющий введенное пользователем значение на начличие исключений/ошибок.
      *
      * @param question - запрос пользователю.
-     * @param range - массив с диапазоном принимаемых значений от пользователя.
+     * @param range - List с диапазоном принимаемых значений от пользователя.
      * @return Значение в формате int, прошедшее проверку на наличие исключений.
      */
     @Override
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         boolean invalid = true;
         int value = -1;
         do {

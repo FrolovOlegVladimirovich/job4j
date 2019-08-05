@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * Интерфейс ввода пользовательских данных из консоли.
  *
@@ -18,8 +20,8 @@ public interface Input {
     /**
      * Получение значения типа int, введенного пользователем.
      * @param question - запрос пользователю.
-     * @param range - массив с диапазоном принимаемых значений от пользователя.
+     * @param range - List с диапазоном принимаемых значений от пользователя.
      * @return Значение типа int.
      */
-    int ask(String question, int[] range);
+    int ask(String question, List<Integer> range);
 }

@@ -1,11 +1,13 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * Используется для получения заранее заданных значений ввода в консоль.
  * С целью последующего использования значений в тестах.
  */
 public class StubInput implements Input {
-    private final String[] value;
+    private final List<String> value;
     private int position;
 
     /**
@@ -13,18 +15,18 @@ public class StubInput implements Input {
      *
      * @param value - массив с данными в формате String для последующего ввода в консоль тестом.
      */
-    public StubInput(final String[] value) {
+    public StubInput(final List<String> value) {
         this.value = value;
     }
 
     @Override
     public String ask(String question) {
-        return this.value[this.position++];
+        return this.value.get(this.position++);
     }
 
     @Override
-    public int ask(String question, int[] range) {
-        int key = Integer.valueOf(this.value[this.position++]);
+    public int ask(String question, List<Integer> range) {
+        int key = Integer.valueOf(this.value.get(this.position++));
         boolean exist = false;
         for (int value : range) {
             if (value == key) {

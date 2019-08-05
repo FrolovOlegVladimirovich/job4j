@@ -5,6 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -40,8 +44,8 @@ public class ValidateInputTest {
      */
     @Test
     public void whenInputTextThenNumberFormatException() {
-        ValidateInput input = new ValidateInput(new StubInput(new String[] {"invalid", "1"}));
-        input.ask("Enter", new int[] {1});
+        ValidateInput input = new ValidateInput(new StubInput(new ArrayList<>(Arrays.asList("invalid", "1"))));
+        input.ask("Enter", Collections.singletonList(1));
         assertThat(this.mem.toString(), is("Ошибка! Введите номер меню в правильном формате: \n"));
     }
 
@@ -50,8 +54,8 @@ public class ValidateInputTest {
      */
     @Test
     public void whenInputOutOfRangeNumberThenMenuOutException() {
-        ValidateInput input = new ValidateInput(new StubInput(new String[] {"2", "1"}));
-        input.ask("Enter", new int[] {1});
+        ValidateInput input = new ValidateInput(new StubInput(new ArrayList<>(Arrays.asList("2", "1"))));
+        input.ask("Enter", Collections.singletonList(1));
         assertThat(this.mem.toString(), is("Данный пункт меню отсутствует! Введите корректный пункт меню: \n"));
     }
 }

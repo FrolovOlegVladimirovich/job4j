@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -26,10 +27,10 @@ public class ConsoleInput implements Input {
      * Получение значения типа int, введенного пользователем.
      * Метод проверяет полученное от пользователя значение на наличие исключений/ошибок.
      * @param question - запрос пользователю.
-     * @param range - массив с диапазоном принимаемых значений от пользователя.
+     * @param range - List с диапазоном принимаемых значений от пользователя.
      * @return Значение типа int.
      */
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         int key = Integer.valueOf(this.ask(question));
         boolean exist = false;
         for (int value : range) {

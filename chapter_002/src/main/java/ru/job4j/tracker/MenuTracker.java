@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Реализация меню программы Tracker.
@@ -12,8 +13,8 @@ import java.util.Arrays;
 public class MenuTracker {
     private Input input;
     private Tracker tracker;
-    private UserAction[] actions = new UserAction[7];
-    private int[] ranges = new int[this.actions.length];
+    private List<UserAction> actions = new ArrayList<>();
+    private List<Integer> ranges = new ArrayList<>();
     private int position;
     private StartUI ui;
 
@@ -30,7 +31,7 @@ public class MenuTracker {
     }
 
     /**
-     * Заполняет массив пунктами меню.
+     * Заполняет ArrayList пунктами меню.
      */
     public void fillActions() {
         addAction(new CreateItem(0, "Добавить новую заявку."));
@@ -43,12 +44,12 @@ public class MenuTracker {
     }
 
     /**
-     * Реализует заполнение массива пунктами меню.
+     * Реализует заполнение ArrayList пунктами меню.
      *
      * @param action - пункт меню, реализующий действие.
      */
     private void addAction(BaseAction action) {
-        this.actions[this.position++] = action;
+        this.actions.add(this.position++, action);
     }
 
     /**
@@ -57,7 +58,7 @@ public class MenuTracker {
      * @param key ключ операции
      */
     public void select(int key) {
-        this.actions[key].execute(this.input, this.tracker);
+        this.actions.get(key).execute(this.input, this.tracker);
     }
 
     /**
@@ -76,22 +77,22 @@ public class MenuTracker {
     }
 
     /**
-     * Сетер присваивает значения пунктов меню в массив ranges.
-     * Массив ranges используется в качестве диапазона значений
+     * Сетер присваивает значения пунктов меню в ArrayList ranges.
+     * ArrayList ranges используется в качестве диапазона значений
      * для проверки введенных пользователем пунктов меню.
      */
     public void setRanges() {
-        for (int i = 0; i != this.actions.length; i++) {
-            this.ranges[i] = i;
+        for (int i = 0; i != this.actions.size(); i++) {
+            this.ranges.add(i);
         }
     }
 
     /**
-     * Гетер получает массив с диапазоном значений пунктов меню.
+     * Гетер получает List с диапазоном значений пунктов меню.
      *
-     * @return Массив.
+     * @return ArrayList.
      */
-    public int[] getRanges() {
+    public List<Integer> getRanges() {
         return this.ranges;
     }
 
@@ -126,7 +127,7 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("-------------------- Список всех заявок --------------------");
             if (tracker.getPosition() != 0) {
-                System.out.println(Arrays.toString(tracker.findAll()));
+                System.out.println(tracker.findAll().toString());
             } else {
                 System.out.println("Заявки в базе отсутствуют!");
             }
@@ -225,9 +226,9 @@ public class MenuTracker {
         public void execute(Input input, Tracker tracker) {
             System.out.println("-------------------- Поиск по имени заявки --------------------");
             String name = input.ask("Введите имя заявки: ");
-            Item[] items = tracker.findByName(name);
-            if (items.length != 0) {
-                System.out.println(Arrays.toString(tracker.findByName(name)));
+            List<Item> items = new ArrayList<>(tracker.findByName(name));
+            if (items.size() != 0) {
+                System.out.println(tracker.findByName(name).toString());
             } else {
                 System.out.println("Заявка с именем " + name + " не найдена!");
             }
