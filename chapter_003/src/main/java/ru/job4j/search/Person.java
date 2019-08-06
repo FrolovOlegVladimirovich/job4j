@@ -1,5 +1,7 @@
 package ru.job4j.search;
 
+import java.util.Objects;
+
 /**
  * Пользователь для телефонного справочника.
  *
@@ -7,9 +9,10 @@ package ru.job4j.search;
  * @since 01.08.2019
  * @version 1.0
  */
-public class Person {
+public class Person implements Comparable<Person> {
     private String id;
     private String name;
+    private String age;
     private String surename;
     private String phone;
     private String adress;
@@ -25,6 +28,19 @@ public class Person {
         this.id = id;
         this.name = name;
         this.adress = adress;
+    }
+
+    public Person(String name, String age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public String getAge() {
+        return age;
     }
 
     public String getId() {
@@ -49,5 +65,39 @@ public class Person {
 
     public String getAdress() {
         return adress;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return this.age.compareTo(o.age);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Person person = (Person) o;
+        return name.equals(person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{"
+                +
+                "name='" + name + '\''
+                +
+                ", age='" + age + '\''
+                +
+                '}';
+
     }
 }
