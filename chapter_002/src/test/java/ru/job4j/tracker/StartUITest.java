@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -36,7 +37,20 @@ public class StartUITest {
             .append(System.lineSeparator());
     private final Tracker tracker = new Tracker();
     private final Item item1 = new Item("test name", "desc 1");
-    private  final Item item2 = new Item("test name", "desc 2");
+    private final Item item2 = new Item("test name", "desc 2");
+    private final Consumer<String> output = new Consumer<>() {
+        private final PrintStream stdout = new PrintStream(out);
+
+        @Override
+        public void accept(String s) {
+            stdout.println(s);
+        }
+
+        @Override
+        public String toString() {
+            return out.toString();
+        }
+    };
 
     /**
      * Добавляет две заявки в трекер.
@@ -66,21 +80,21 @@ public class StartUITest {
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("0", "test name", "test desc", "6")));
-        new StartUI(input, tracker).init();
+        new StartUI(input, tracker, output).init();
         assertThat(tracker.findAll().get(0).getName(), is("test name"));
     }
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("2", item1.getId(), "new test name", "new desc", "6")));
-        new StartUI(input, tracker).init();
+        new StartUI(input, tracker, output).init();
         assertThat(tracker.findById(item1.getId()).getName(), is("new test name"));
     }
 
     @Test
     public void whenDeleteItem() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("3", item1.getId(), "", "6")));
-        new StartUI(input, tracker).init();
+        new StartUI(input, tracker, output).init();
         Item result = null;
         assertThat(tracker.findById(item1.getId()), is(result));
     }
@@ -88,15 +102,15 @@ public class StartUITest {
     @Test
     public void whenCancelDeleteThenTrackerNoDelete() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("3", item1.getId(), "N", "6")));
-        new StartUI(input, tracker).init();
+        new StartUI(input, tracker, output).init();
         assertThat(tracker.findById(item1.getId()).getName(), is("test name"));
     }
 
     @Test
     public void whenShowAllItems() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("1", "6")));
-        new StartUI(input, tracker).init();
-        assertThat(new String(out.toByteArray()), is(new StringBuilder()
+        new StartUI(input, tracker, output).init();
+        assertThat(this.output.toString(), is(new StringBuilder()
                         .append(this.menu)
                         .append("-------------------- Список всех заявок --------------------")
                         .append(System.lineSeparator())
@@ -129,8 +143,8 @@ public class StartUITest {
     @Test
     public void whenFindItemById() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("4", item1.getId(), "6")));
-        new StartUI(input, tracker).init();
-        assertThat(new String(out.toByteArray()), is(new StringBuilder()
+        new StartUI(input, tracker, output).init();
+        assertThat(this.output.toString(), is(new StringBuilder()
                         .append(this.menu)
                         .append("-------------------- Поиск по номеру заявки --------------------")
                         .append(System.lineSeparator())
@@ -149,8 +163,8 @@ public class StartUITest {
     @Test
     public void whenFindItemsByName() {
         Input input = new StubInput(new ArrayList<>(Arrays.asList("5", "test name", "6")));
-        new StartUI(input, tracker).init();
-        assertThat(new String(out.toByteArray()), is(new StringBuilder()
+        new StartUI(input, tracker, output).init();
+        assertThat(this.output.toString(), is(new StringBuilder()
                         .append(this.menu)
                         .append("-------------------- Поиск по имени заявки --------------------")
                         .append(System.lineSeparator())
