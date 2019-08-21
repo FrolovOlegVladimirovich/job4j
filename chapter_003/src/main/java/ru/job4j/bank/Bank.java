@@ -22,14 +22,10 @@ public class Bank {
      * @return User.
      */
     public User getUserByPassport(String passport) {
-        User result = null;
-        for (User user : this.users.keySet()) {
-            if (user.getPassport().equals(passport)) {
-                result = user;
-                break;
-            }
-        }
-        return result;
+        return this.users.keySet()
+                .stream()
+                .filter(user -> user.getPassport().equals(passport))
+                .findFirst().orElse(null);
     }
 
     /**
@@ -92,18 +88,10 @@ public class Bank {
      * @return Account пользователя.
      */
     public Account getUserAccount(String passport, String requisites) {
-        Account result = null;
-        User user = getUserByPassport(passport);
-        if (user != null) {
-            for (Account account :this.users.get(user)) {
-                if (account.getRequisites() == Integer.parseInt(requisites)) {
-                    result = account;
-                }
-            }
-        } else {
-            System.out.println("Пользователь не найден!");
-        }
-        return result;
+    return this.users.get(getUserByPassport(passport))
+            .stream()
+            .filter(account -> account.getRequisites() == Integer.parseInt(requisites))
+            .findFirst().orElse(null);
     }
 
     /**
