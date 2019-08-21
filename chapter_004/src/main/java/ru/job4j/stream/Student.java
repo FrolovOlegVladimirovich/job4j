@@ -11,13 +11,25 @@ import java.util.Objects;
  */
 public class Student {
     private final int score;
+    private final String firstName;
+    private final String lastName;
 
-    public Student(int score) {
+    public Student(String firstName, String lastName, int score) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.score = score;
     }
 
-    public int getScore() {
-        return score;
+    @Override
+    public String toString() {
+        return "Student{"
+                + "score="
+                + score
+                + ", firstName='"
+                + firstName + '\''
+                + ", lastName='"
+                + lastName + '\''
+                + '}';
     }
 
     @Override
@@ -29,19 +41,25 @@ public class Student {
             return false;
         }
         Student student = (Student) o;
-        return score == student.score;
+        return score == student.score
+                && firstName.equals(student.firstName)
+                && lastName.equals(student.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(score);
+        return Objects.hash(score, firstName, lastName);
     }
 
-    @Override
-    public String toString() {
-        return "Student{"
-                + "score="
-                + score
-                + '}';
+    public int getScore() {
+        return score;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }
