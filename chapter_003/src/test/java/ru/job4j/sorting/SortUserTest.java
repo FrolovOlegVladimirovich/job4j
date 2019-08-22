@@ -21,7 +21,7 @@ public class SortUserTest {
     @Test
     public void testSortingByAgeAfterSortingByName() {
         SortUser sortedUsers = new SortUser();
-        List<Person> persons = new ArrayList<>(Arrays.asList(
+        List<Person> persons = List.of(
                 new Person("Petr", "35"),
                 new Person("Oleg", "31"),
                 new Person("Vasily", "25"),
@@ -31,9 +31,9 @@ public class SortUserTest {
                 new Person("Nikolay", "44"),
                 new Person("Polina", "7"),
                 new Person("Alena", "31")
-        ));
+        );
         Set<Person> result = sortedUsers.sortAge(persons);
-        Set<Person> expected = new TreeSet<>(Arrays.asList(
+        Set<Person> expected = Set.of(
                 new Person("Polina", "7"),
                 new Person("Vasily", "25"),
                 new Person("Olga", "29"),
@@ -43,7 +43,7 @@ public class SortUserTest {
                 new Person("Petr", "35"),
                 new Person("Vitaly", "38"),
                 new Person("Nikolay", "44")
-        ));
+        );
         assertThat(result, is(expected));
     }
 
@@ -64,7 +64,7 @@ public class SortUserTest {
 
         ));
         List<Person> result = users.sortNameLength(persons);
-        List<Person> expected = new ArrayList<>(Arrays.asList(
+        List<Person> expected = List.of(
                 new Person("Eva"),
                 new Person("Oleg"),
                 new Person("Alena"),
@@ -72,7 +72,7 @@ public class SortUserTest {
                 new Person("Nikolay"),
                 new Person("Vsevolod"),
                 new Person("Viktoriya")
-        ));
+        );
         assertThat(result, is(expected));
     }
 
@@ -96,7 +96,7 @@ public class SortUserTest {
 
         ));
         List<Person> result = users.sortAllFields(persons);
-        List<Person> expected = new ArrayList<>(Arrays.asList(
+        List<Person> expected = List.of(
                 new Person("Alena", "25"),
                 new Person("Eva", "31"),
                 new Person("Nikolay", "44"),
@@ -107,7 +107,7 @@ public class SortUserTest {
                 new Person("Viktoriya", "31"),
                 new Person("Viktoriya", "45"),
                 new Person("Vsevolod", "38")
-        ));
+        );
         assertThat(result, is(expected));
     }
 }
