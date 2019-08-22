@@ -1,9 +1,11 @@
 package ru.job4j.stream;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Методы для работы со списком учеников.
@@ -30,5 +32,19 @@ public class School {
      */
     Map<String, Student> collectStudentsFromListToMap(List<Student> students) {
         return students.stream().collect(Collectors.toMap(Student::getLastName, student -> student));
+    }
+
+    /**
+     * Фильтр учеников по количеству баллов больше bound.
+     * @param students Список учеников.
+     * @param bound Колличество баллов.
+     * @return List учеников с количеством баллов больше bound.
+     */
+    List<Student> levelOf(List<Student> students, int bound) {
+        return students.stream()
+                .sorted(Comparator.nullsFirst((o1, o2) -> o2.getScore() - o1.getScore()))
+                .flatMap(Stream::ofNullable)
+                .takeWhile(score -> score.getScore() > bound)
+                .collect(Collectors.toList());
     }
 }

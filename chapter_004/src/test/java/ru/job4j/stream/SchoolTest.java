@@ -1,9 +1,7 @@
 package ru.job4j.stream;
 
 import org.junit.Test;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -16,7 +14,7 @@ import static org.junit.Assert.assertThat;
  * @version 1.0
  */
 public class SchoolTest {
-    final List<Student> students = List.of(
+    private List<Student> students = new ArrayList<>(Arrays.asList(
             new Student("Еремей", "Евтушенков", 40),
             new Student("Мирослав", "Григорьев", 10),
             new Student("Ульяна", "Курпатова", 24),
@@ -33,7 +31,7 @@ public class SchoolTest {
             new Student("Аза", "Брязгина", 97),
             new Student("Марина", "Кудрявцева", 100),
             new Student("Лев", "Бехтерев", 8)
-    );
+    ));
     final School school = new School();
 
     /**
@@ -96,6 +94,24 @@ public class SchoolTest {
         expect.put("Евтушенков", evtushenkov);
         expect.put("Григорьев", grigorev);
         expect.put("Курпатова", kurpatova);
+        assertThat(result, is(expect));
+    }
+
+    /**
+     * Фильтр учеников по количеству баллов больше bound == 70, исключая null-элемент.
+     */
+    @Test
+    public void returListOfStudentsWithScoreMoreThan70() {
+        students.add(null);
+        List<Student> expect = List.of(
+                new Student("Марина", "Кудрявцева", 100),
+                new Student("Аза", "Брязгина", 97),
+                new Student("Ким", "Ельцов", 90),
+                new Student("Евдокия", "Фукина", 85),
+                new Student("Кир", "Ярыкин", 84),
+                new Student("Федот", "Коржев", 75)
+        );
+        List<Student> result = school.levelOf(students, 70);
         assertThat(result, is(expect));
     }
 }
