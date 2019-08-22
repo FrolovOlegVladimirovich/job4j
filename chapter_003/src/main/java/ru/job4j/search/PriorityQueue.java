@@ -20,7 +20,7 @@ public class PriorityQueue {
      */
     public void put(Task task) {
         if (tasks.size() != 0) {
-            for (int i = 0; i != tasks.size(); i++) {
+            for (var i = 0; i != tasks.size(); i++) {
                 if (task.getPriority() <= tasks.get(i).getPriority()) {
                     tasks.add(i, task);
                     break;
