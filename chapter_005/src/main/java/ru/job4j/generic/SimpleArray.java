@@ -3,7 +3,6 @@ package ru.job4j.generic;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 /**
  * Универсальная обертка над массивом.
@@ -108,14 +107,11 @@ public class SimpleArray<T> implements Iterable<T> {
             return false;
         }
         SimpleArray<?> that = (SimpleArray<?>) o;
-        return counterPosition == that.counterPosition
-                && Arrays.equals(collection, that.collection);
+        return Arrays.equals(collection, that.collection);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(counterPosition);
-        result = 31 * result + Arrays.hashCode(collection);
-        return result;
+        return Arrays.hashCode(collection);
     }
 }
