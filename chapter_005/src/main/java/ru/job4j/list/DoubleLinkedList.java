@@ -14,8 +14,8 @@ import java.util.NoSuchElementException;
 public class DoubleLinkedList<E> implements Iterable<E> {
     private int modCount;
     private int size;
-    Node<E> first;
-    Node<E> last;
+    private Node<E> first;
+    private Node<E> last;
 
     /**
      * Узел - элемент списка.
@@ -30,6 +30,32 @@ public class DoubleLinkedList<E> implements Iterable<E> {
             this.previous = previous;
             this.data = data;
             this.next = next;
+        }
+    }
+
+    public E getFirstData() {
+        if (first == null) {
+            throw new NoSuchElementException();
+        }
+        return first.data;
+    }
+
+    public E getLastData() {
+        if (last == null) {
+            throw new NoSuchElementException();
+        }
+        return last.data;
+    }
+
+    public void deleteLastNode() {
+        if (last == null) {
+            throw new NoSuchElementException();
+        }
+        last = last.previous;
+        size--;
+        modCount++;
+        if (size == 0) {
+            first = null;
         }
     }
 
