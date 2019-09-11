@@ -10,20 +10,22 @@ import java.util.Map;
 public class UserTest {
 
     /**
-     * Выведет в консоль hashcode объектов и значение:
-     * {ru.job4j.map.User@4b6995df=oleg2, ru.job4j.map.User@5474c6c=oleg1}
-     * true
+     * Выведет в консоль hashcode объекта и значение:
+     * {ru.job4j.map.User@4e5bb0e9=oleg2}
      *
-     * Hashcodes объектов oleg1 и oleg2 разные, т.к.
-     * метод hashCode() в классе User не переопределен.
+     * Hashcodes объектов oleg1 и oleg2 одинаковы, т.к.
+     * метод hashCode() в классе User переопределен.
+     * При сравнении объектов через equals(), они также равны,
+     * т.к. метод equals() в классе User переопределен.
      *
-     * Т.к. в классе User переопределен только метод equals(),
-     * то при сравнении объектов результат будет true.
+     * При добавлении в HashMap, сравнив объекты по hashcode получаем true.
+     * Далее объекты сравниваются через equals(), т.к. hashcode
+     * может быть не уникальным (т.е. одинаковым у разных объектов).
      *
-     * В HashMap оба объекта будут добавлены успешно, т.к.
-     * hashcodes объектов разные. По логике работы HashMap:
-     * если hashcodes объектов разные, значит
-     * объекты 100% разные.
+     * В результате объект oleg2, добавляется в HashMap, удалив из
+     * HashMap объект oleg1, т.к. oleg2 и oleg1 одинаковы и по hashCode(),
+     * и по equals().
+     *
      */
     @Test
     public void userTest() {
@@ -39,6 +41,5 @@ public class UserTest {
 
 
         System.out.println(map);
-        System.out.println(oleg1.equals(oleg2));
     }
 }

@@ -59,10 +59,10 @@ public class User {
                 && Objects.equals(birthday, user.birthday);
     }
 
-//    @Override
-//    public int hashCode() {
-//        return 31 * children
-//                + (name != null ? name.hashCode() : 0)
-//                + (birthday != null ? birthday.hashCode() : 0);
-//    }
+    @Override
+    public int hashCode() {
+        return 31 * children
+                + (name != null ? name.hashCode() : 0)
+                + (birthday != null ? birthday.hashCode() : 0);
+    }
 }
