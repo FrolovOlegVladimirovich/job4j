@@ -11,12 +11,13 @@ public class UserTest {
 
     /**
      * Выведет в консоль hashcode объектов и значение:
-     * {ru.job4j.map.User@13b6d03=oleg1, ru.job4j.map.User@f5f2bb7=oleg2}
+     * {ru.job4j.map.User@4e08e4c8=oleg1, ru.job4j.map.User@4e08e4c8=oleg2}
      *
-     * Не смотря на одинаковые значения полей в объектах Oleg1 и Oleg2,
-     * hashcode у объектов разные.
-     * Т.к. метод hashCode() в классе User не переопределен, то каждому новому экземпляру
-     * класса User присваивается новый уникальный hashcode, не смотря на значение полей.
+     * Теперь hashcodes объектов oleg1 и oleg2 равны, т.к.
+     * метод hashCode() в классе User был переопределен
+     * с учетом значений полей name, children и birthday.
+     *
+     * Т.к. значения полей одинаковы в обоих объектах, то hashcodes объектов также равны.
      */
     @Test
     public void userTest() {

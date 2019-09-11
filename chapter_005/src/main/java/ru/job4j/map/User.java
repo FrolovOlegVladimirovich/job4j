@@ -43,4 +43,11 @@ public class User {
     public void setBirthday(Calendar birthday) {
         this.birthday = birthday;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * children
+                + (name != null ? name.hashCode() : 0)
+                + (birthday != null ? birthday.hashCode() : 0);
+    }
 }
