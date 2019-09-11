@@ -1,6 +1,7 @@
 package ru.job4j.map;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * Модель User с полями "имя", "дети", "день рождения".
@@ -45,9 +46,23 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
-        return 31 * children
-                + (name != null ? name.hashCode() : 0)
-                + (birthday != null ? birthday.hashCode() : 0);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return children == user.children
+                && Objects.equals(name, user.name)
+                && Objects.equals(birthday, user.birthday);
     }
+
+//    @Override
+//    public int hashCode() {
+//        return 31 * children
+//                + (name != null ? name.hashCode() : 0)
+//                + (birthday != null ? birthday.hashCode() : 0);
+//    }
 }

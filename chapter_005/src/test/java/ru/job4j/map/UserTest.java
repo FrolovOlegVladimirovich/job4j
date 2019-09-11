@@ -11,13 +11,19 @@ public class UserTest {
 
     /**
      * Выведет в консоль hashcode объектов и значение:
-     * {ru.job4j.map.User@4e08e4c8=oleg1, ru.job4j.map.User@4e08e4c8=oleg2}
+     * {ru.job4j.map.User@4b6995df=oleg2, ru.job4j.map.User@5474c6c=oleg1}
+     * true
      *
-     * Теперь hashcodes объектов oleg1 и oleg2 равны, т.к.
-     * метод hashCode() в классе User был переопределен
-     * с учетом значений полей name, children и birthday.
+     * Hashcodes объектов oleg1 и oleg2 разные, т.к.
+     * метод hashCode() в классе User не переопределен.
      *
-     * Т.к. значения полей одинаковы в обоих объектах, то hashcodes объектов также равны.
+     * Т.к. в классе User переопределен только метод equals(),
+     * то при сравнении объектов результат будет true.
+     *
+     * В HashMap оба объекта будут добавлены успешно, т.к.
+     * hashcodes объектов разные. По логике работы HashMap:
+     * если hashcodes объектов разные, значит
+     * объекты 100% разные.
      */
     @Test
     public void userTest() {
@@ -33,5 +39,6 @@ public class UserTest {
 
 
         System.out.println(map);
+        System.out.println(oleg1.equals(oleg2));
     }
 }
