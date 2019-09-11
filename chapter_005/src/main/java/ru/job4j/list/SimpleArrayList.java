@@ -50,6 +50,13 @@ public class SimpleArrayList<E> implements Iterable<E> {
         return (E) container[index];
     }
 
+    /**
+     * Возвращает количество элементов в контейнере.
+     */
+    public int size() {
+        return counter;
+    }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
