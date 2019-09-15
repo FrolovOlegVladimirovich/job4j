@@ -65,4 +65,13 @@ public class User {
                 + (name != null ? name.hashCode() : 0)
                 + (birthday != null ? birthday.hashCode() : 0);
     }
+
+    @Override
+    public String toString() {
+        return "User{"
+                + "name='"
+                + name
+                + '\''
+                + '}';
+    }
 }
