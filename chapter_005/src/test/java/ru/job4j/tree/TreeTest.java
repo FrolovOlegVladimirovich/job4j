@@ -205,6 +205,25 @@ public class TreeTest {
         assertThat(tree.allElements(), is(expect));
     }
 
+    /**
+     * Проверка дерева на бинарность.
+     */
+    @Test
+    public void whenTreeNoBinaryResultFalseAndTreeBinIsBinaryResultTrue() {
+        Tree<Integer> treeBin = new Tree<>(1);
+
+        treeBin.add(1, 2);
+        treeBin.add(1, 3);
+        treeBin.add(3, 4);
+        treeBin.add(3, 5);
+        treeBin.add(2, 6);
+        treeBin.add(5, 9);
+        treeBin.add(5, 10);
+
+        assertThat(tree.isBinary(), is(false));
+        assertThat(treeBin.isBinary(), is(true));
+    }
+
     /* ---------------- Тесты итератора -------------- */
 
     @Test(expected = NoSuchElementException.class)

@@ -152,6 +152,26 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
         return result;
     }
 
+    /**
+     * Проверят дерево на бинарность.
+     * @return true, если дерево бинарное, иначе false.
+     */
+    public boolean isBinary() {
+        Queue<Node<E>> data = new LinkedList<>();
+        data.offer(root);
+        while (!data.isEmpty()) {
+            List<Node<E>> leaves = data.poll().leaves();
+            if (leaves.size() > 2) {
+                return false;
+            } else {
+                for (Node<E> child : leaves) {
+                    data.offer(child);
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public Iterator<E> iterator() {
         return new Iterator<>() {
