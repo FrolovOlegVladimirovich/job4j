@@ -16,7 +16,7 @@ public class TrackerTest {
      */
     @Test
     public void whenAddNewItemThenTrackerHasSameItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         long created = System.currentTimeMillis();
         Item item = new Item("test 1", "testDescription", created);
         tracker.add(item);
@@ -29,7 +29,7 @@ public class TrackerTest {
      */
     @Test
     public void whenReplaceNameThenReturnNewName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item previous = new Item("test1", "testDescription", 123L);
         tracker.add(previous);
         Item next = new Item("test2", "testDescription2", 1234L);
@@ -43,7 +43,7 @@ public class TrackerTest {
      */
     @Test
     public void whenDeleteItemThreeThenReturnArrayWithoutDeletedItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         List<Item> ex = Arrays.asList(
                 tracker.add(new Item("test1", "testDescription1", 1L)),
                 tracker.add(new Item("test2", "testDescription2", 12L)),
@@ -59,7 +59,7 @@ public class TrackerTest {
      */
     @Test
     public void whenTwoItemsAddedInTrackerEqualsAnotherArray() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item one = new Item("test1", "testDescription1", 1L);
         Item two = new Item("test2", "testDescription2", 12L);
         ArrayList<Item> result = new ArrayList<>(Arrays.asList(one, two));
@@ -73,7 +73,7 @@ public class TrackerTest {
      */
     @Test
     public void findTwoItemsWithTheSameName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item one = new Item("test1", "testDescription1", 1L);
         Item two = new Item("test4", "testDescription2", 12L);
         Item three = new Item("test3", "testDescription3", 123L);
@@ -91,7 +91,7 @@ public class TrackerTest {
      */
     @Test
     public void findItemById() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item one = new Item("test1", "testDescription1", 1L);
         Item two = new Item("test4", "testDescription2", 12L);
         Item three = new Item("test3", "testDescription3", 123L);

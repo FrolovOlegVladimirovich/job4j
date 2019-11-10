@@ -10,7 +10,7 @@ import java.util.List;
  * @since 02.06.2019
  * @version 1.0
  */
-public class Tracker {
+public class Tracker implements ITracker {
     private final List<Item> items = new ArrayList<>();
     private int position = 0;
 

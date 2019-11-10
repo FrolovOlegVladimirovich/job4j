@@ -35,7 +35,7 @@ public class StartUITest {
             .append("6. Закрыть программу.")
             .append(System.lineSeparator())
             .append(System.lineSeparator());
-    private final Tracker tracker = new Tracker();
+    private final ITracker tracker = new Tracker();
     private final Item item1 = new Item("test name", "desc 1");
     private final Item item2 = new Item("test name", "desc 2");
     private final Consumer<String> output = new Consumer<>() {
