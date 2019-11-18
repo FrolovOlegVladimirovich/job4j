@@ -3,10 +3,9 @@ package ru.job4j.postgresql.trackersql;
 import org.junit.*;
 import ru.job4j.tracker.Item;
 
+import java.io.InputStream;
 import java.sql.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -18,185 +17,135 @@ import static org.junit.Assert.*;
  * @since 10.11.2019
  * @version 1.0
  */
-@Ignore
 public class TrackerSQLTest {
-    private static TrackerSQL sql;
-    private static final String TABLE_NAME = "items";
-    private static boolean initResult;
-    private static boolean checkDataBaseStructureFalse;
-    private static boolean checkDataBaseStructureTrue;
-    private static Connection testConnection;
+    private final Properties config = new Properties();
+    private String tableName;
 
-    /**
-     * Устанавливает соединение с базой данных и создает таблицу с необходимой структурой.
-     */
-    @BeforeClass
-    public static void setUp() throws Exception {
-        sql = new TrackerSQL();
-        initResult = sql.init();
-        checkDataBaseStructureFalse = sql.checkDataBaseStructure();
-        if (!checkDataBaseStructureFalse) {
-            sql.createDataBaseStructure();
-            checkDataBaseStructureTrue = sql.checkDataBaseStructure();
+    public Connection init() {
+        Connection result = null;
+        try (InputStream propertiesStream = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
+            config.load(Objects.requireNonNull(propertiesStream));
+            Class.forName(config.getProperty("driver-class-name"));
+            tableName = config.getProperty("table_name");
+            result = DriverManager.getConnection(
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Class.forName("org.postgresql.Driver");
-        testConnection = DriverManager.getConnection(
-                "jdbc:postgresql://127.0.0.1:5432/tracker",
-                "postgres",
-                "password");
-    }
-
-    /**
-     * Удаляет таблицу в базе данных и закрывает соединения.
-     * @throws Exception - возможны исключения.
-     */
-    @AfterClass
-    public static void closeConnectionAndClearDataBase() throws Exception {
-        PreparedStatement statement = testConnection.prepareStatement(String.format("%s %s%s",
-                "DROP TABLE",
-                TABLE_NAME,
-                ";"));
-        statement.execute();
-        statement.close();
-        sql.close();
-        testConnection.close();
-    }
-
-    /**
-     * После каждого теста удаляет все строки в таблице.
-     * @throws SQLException - возможное исключение.
-     */
-    @After
-    public void deleteAllEntries() throws SQLException {
-        PreparedStatement statement = testConnection.prepareStatement(String.format("%s %s%s",
-                "DELETE FROM",
-                TABLE_NAME,
-                ";"));
-        statement.execute();
-        statement.close();
+        return result;
     }
 
     @Test
-    public void whenConnectionEstablishedResultIsTrue() {
-        assertThat(initResult, is(true));
+    public void whenAddItemToTheDatabase() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            trackerSQL.add(new Item("item", "description"));
+
+            assertThat(trackerSQL.findByName("item").size(), is(1));
+        }
     }
 
     @Test
-    public void whenDataBaseStructureExistsResultIsTrue() {
-        assertThat(checkDataBaseStructureFalse, is(false));
-        assertThat(checkDataBaseStructureTrue, is(true));
+    public void whenEditItemNameAndDescriptionById() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            String id = trackerSQL.add(new Item("item", "description")).getId();
+
+            String nameItem = "item editing from Java";
+            String descriptionItem = "I edit this item from Java!";
+            boolean result = trackerSQL.replace(id, new Item(nameItem, descriptionItem));
+
+            assertThat(trackerSQL.findByName("item editing from Java").size(), is(1));
+            assertTrue(result);
+        }
     }
 
     @Test
-    public void whenAddItemToTheDatabase() {
-        String nameItem = "item test";
-        String descriptionItem = "description test";
-        Item expectItem = new Item(nameItem, descriptionItem);
-        Item resultItem = sql.add(expectItem);
+    public void whenDeleteItemById() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            String id = trackerSQL.add(new Item("item", "description")).getId();
 
-        Set<String> expect = Set.of(nameItem, descriptionItem);
-        Set<String> result = Set.of(resultItem.getName(), resultItem.getDesc());
+            boolean result = trackerSQL.delete(id);
 
-        assertThat(result, is(expect));
+            assertThat(trackerSQL.findByName("item").size(), is(0));
+            assertTrue(result);
+        }
+
     }
 
     @Test
-    public void whenEditItemNameAndDescriptionById() {
-        Item item = sql.add(new Item("item test", "description test"));
-        String id = item.getId();
-        String nameItem = "item editing from Java";
-        String descriptionItem = "I edit this item from Java!";
+    public void whenFindAllItemsInDatabase() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            Item item1 = new Item("item test - 1", "description test - 1");
+            Item item2 = new Item("item test - 2", "description test - 2");
+            Set<String> expect = Set.of(
+                    item1.getName(), item2.getName(),
+                    item1.getDesc(), item2.getDesc()
+            );
 
-        Item expectItem = new Item(nameItem, descriptionItem);
-        boolean result = sql.replace(id, expectItem);
+            trackerSQL.add(item1);
+            trackerSQL.add(item2);
+            Set<String> result = new HashSet<>();
+            List<Item> items = trackerSQL.findAll();
+            items.forEach(item -> {
+                result.add(item.getName());
+                result.add(item.getDesc());
+            });
 
-        assertThat(result, is(true));
+            assertThat(result, is(expect));
+        }
     }
 
     @Test
-    public void whenDeleteItemById() {
-        sql.add(new Item("item test", "description test"));
-        String id = "1";
-        boolean result = sql.delete(id);
+    public void whenFindItemsByName() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            Item item1 = new Item("item 1", "description 1");
+            Item item2 = new Item("item 2", "description 2");
+            Item item3 = new Item("item 3", "description 3");
+            Item item4 = new Item("item 4", "description 4");
+            Item item5 = new Item("item 3", "duplicate 3");
+            trackerSQL.add(item1);
+            trackerSQL.add(item2);
+            trackerSQL.add(item3);
+            trackerSQL.add(item4);
+            trackerSQL.add(item5);
 
-        assertThat(result, is(true));
+            Set<String> expect = Set.of(item3.getDesc(), item5.getDesc());
+            Set<String> result = new HashSet<>();
+            trackerSQL.findByName("item 3").forEach(item -> result.add(item.getDesc()));
+
+            assertThat(result, is(expect));
+        }
     }
 
     @Test
-    public void whenFindAllItemsInDatabase() {
-        Item item1 = new Item("item test - 1", "description test - 1");
-        Item item2 = new Item("item test - 2", "description test - 2");
-        Item item3 = new Item("item test - 3", "description test - 3");
-        Item item4 = new Item("item test - 4", "description test - 4");
-        sql.add(item1);
-        sql.add(item2);
-        sql.add(item3);
-        sql.add(item4);
+    public void whenFindItemById() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            trackerSQL.add(new Item("item 1", "description 1"));
+            String item2Id = trackerSQL.add(new Item("item 2", "description 2")).getId();
 
-        Set<String> expect = Set.of(
-                item1.getName(), item2.getName(), item3.getName(), item4.getName(),
-                item1.getDesc(), item2.getDesc(), item3.getDesc(), item4.getDesc()
-        );
-        Set<String> result = new HashSet<>();
-        List<Item> items = sql.findAll();
-        items.forEach(item -> {
-            result.add(item.getName());
-            result.add(item.getDesc());
-        });
+            String result = trackerSQL.findById(item2Id).getName();
 
-        assertThat(result, is(expect));
+            assertThat(result, is("item 2"));
+        }
     }
 
     @Test
-    public void whenFindItemsByName() {
-        Item item1 = new Item("item test - 1", "description test - 1");
-        Item item2 = new Item("item test - 2", "description test - 2");
-        Item item3 = new Item("item test - 3", "description test - 3");
-        Item item4 = new Item("item test - 4", "description test - 4");
-        Item item5 = new Item("item test - 3", "duplicate description test - 3");
-        sql.add(item1);
-        sql.add(item2);
-        sql.add(item3);
-        sql.add(item4);
-        sql.add(item5);
+    public void whenGetTotalNumberOfItemsInDatabase() throws Exception {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()), tableName)) {
+            Item item1 = new Item("item 1", "description 1");
+            Item item2 = new Item("item 2", "description 2");
+            Item item3 = new Item("item 3", "description 3");
+            Item item4 = new Item("item 4", "description 4");
 
-        Set<String> expect = Set.of(item3.getDesc(), item5.getDesc());
-        Set<String> result = new HashSet<>();
-        sql.findByName("item test - 3").forEach(item -> result.add(item.getDesc()));
+            trackerSQL.add(item1);
+            trackerSQL.add(item2);
+            trackerSQL.add(item3);
+            trackerSQL.add(item4);
 
-        assertThat(result, is(expect));
-    }
-
-    @Test
-    public void whenFindItemById() {
-        Item item1 = new Item("item 1", "description 1");
-        sql.add(item1);
-        Item item2 = new Item("item 2", "description 2");
-        item2.setId("2");
-        sql.add(item2);
-        Item item3 = new Item("item 3", "description 3");
-        item3.setId("3");
-        String item3Id = sql.add(item3).getId();
-        Item item4 = new Item("item 4", "description 4");
-        item4.setId("4");
-        sql.add(item4);
-
-        String result = sql.findById(item3Id).getName();
-
-        assertThat(result, is(item3.getName()));
-    }
-
-    @Test
-    public void whenGetTotalNumberOfItemsInDatabase() {
-        Item item1 = new Item("item 1", "description 1");
-        Item item2 = new Item("item 2", "description 2");
-        Item item3 = new Item("item 3", "description 3");
-        Item item4 = new Item("item 4", "description 4");
-        sql.add(item1);
-        sql.add(item2);
-        sql.add(item3);
-        sql.add(item4);
-
-        assertThat(sql.getPosition(), is(4));
+            assertThat(trackerSQL.getPosition(), is(4));
+            assertThat(trackerSQL.findAll().size(), is(4));
+        }
     }
 }

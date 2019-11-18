@@ -21,6 +21,14 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     private String tableName;
     private final Logger log = LogManager.getLogger(TrackerSQL.class.getName());
 
+    public TrackerSQL() {
+    }
+
+    public TrackerSQL(Connection connection, String tableName) {
+        this.connection = connection;
+        this.tableName = tableName;
+    }
+
     /**
      * Инициализирует соединение с базой данных SQL.
      * @return Состояние соединения с базой данных.
