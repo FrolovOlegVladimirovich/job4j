@@ -1,7 +1,8 @@
 package ru.job4j.interactcalculator;
 import ru.job4j.calculator.Calculator;
+import ru.job4j.engineeringcalculator.EngCalc;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Interactive calculator with console input/output and memory storage.
@@ -9,11 +10,12 @@ import java.util.Scanner;
  */
 public class InteractCalc extends Calculator {
     private final String exit = "q";
-    private Double first;
-    private Double second;
-    private Double memory;
-    private Double result;
-    private CalcAction action;
+    protected Double first;
+    protected Double second;
+    protected Double memory;
+    protected Double result;
+    protected CalcAction action;
+    protected DispatchCalc dispatchCalc;
 
     /**
      * Console input.
@@ -38,12 +40,17 @@ public class InteractCalc extends Calculator {
     public Double calculate(String input) {
         Double result = null;
         if (parseUserInput(input)) {
-            result = new DispatchCalc(this, first, second, action).init().send();
+            createDispatcher();
+            result = dispatchCalc.init().send();
         }
         first = null;
         second = null;
         action = null;
         return result;
+    }
+
+    protected void createDispatcher() {
+        dispatchCalc = new DispatchCalc(this, first, second, action);
     }
 
     /**
@@ -52,6 +59,36 @@ public class InteractCalc extends Calculator {
      * @return True if parsing was successful.
      */
     public boolean parseUserInput(String input) {
+        String action = checkAction(input);
+        if (action == null) {
+            return false;
+        }
+        String[] elements = checkNumOfDigits(input);
+        if (elements == null) {
+            return false;
+        }
+        List<Double> numbers = checkNumbers(elements);
+        if (numbers == null) {
+            return false;
+        }
+        Object[] numArray = numbers.toArray();
+        if (numbers.isEmpty()) {
+            return false;
+        } else if (numbers.size() == 2) {
+            this.first = (Double) numArray[0];
+            this.second = (Double) numArray[1];
+        } else {
+            this.first = numbers.get(0);
+        }
+        return true;
+    }
+
+    /**
+     * Checks input for a valid action character.
+     * @param input User input.
+     * @return Returns the character if validation is successful.
+     */
+    protected String checkAction(String input) {
         String action = null;
         for (CalcAction value : CalcAction.values()) {
             String symbol = value.getSymbol();
@@ -62,43 +99,52 @@ public class InteractCalc extends Calculator {
             }
         }
         if (action == null) {
-            if (exit.equals(input)) {
-                return false;
+            if (!exit.equals(input)) {
+
+                System.out.println(String.format(
+                        "Missing valid operation character. Should be %s",
+                        CalcAction.getFormattedSymbols())
+                );
             }
-            System.out.println(String.format(
-                    "Missing valid operation character. Should be %s",
-                    CalcAction.getFormattedSymbols())
-            );
-            return false;
         }
-        String[] elements = input.split(String.format("\\%s", action));
-        if (elements.length != 2) {
-            System.out.println(String.format(
-                    "Expression must contain three elements: [number1] %s [number2]",
-                    CalcAction.getFormattedSymbols()));
-            return false;
-        }
-        Double[] numbers = new Double[2];
-        for (int i = 0; i < elements.length; i++) {
+        return action;
+    }
+
+    /**
+     * Checks the number of digits in the input.
+     * @param input User input.
+     * @return Array of numbers.
+     */
+    protected String[] checkNumOfDigits(String input) {
+        String[] elements = input.split(String.format("\\%s", action.getSymbol()));
+        return elements.length != 2 ? null : elements;
+    }
+
+    /**
+     * Checks if characters are numbers.
+     * @param elements Elements that should contain numbers.
+     * @return List of numbers.
+     */
+    protected List<Double> checkNumbers(String[] elements) {
+        List<Double> numbers = new ArrayList<>();
+        for (String element : elements) {
             try {
-                numbers[i] = Double.valueOf(elements[i].trim());
+                numbers.add(Double.valueOf(element.trim()));
             } catch (NumberFormatException e) {
-                if ("m".equals(elements[i].trim())) {
+                if ("m".equals(element.trim())) {
                     if (memory != null) {
-                        numbers[i] = memory;
+                        numbers.add(memory);
                     } else {
                         System.out.println("No value in memory.");
-                        return false;
+                        return null;
                     }
                 } else {
                     System.out.println("Invalid character instead of number.");
-                    return false;
+                    return null;
                 }
             }
         }
-        this.first = numbers[0];
-        this.second = numbers[1];
-        return true;
+        return numbers;
     }
 
     /**
@@ -122,9 +168,9 @@ public class InteractCalc extends Calculator {
     public void init() {
         System.out.printf("%s\n%s %s %s\n%s\n%s\n",
                 "-------Interactive calculator-------",
-                "Expression must contain three elements: [number1]",
-                CalcAction.getFormattedSymbols(),
-                "[number2]",
+                "Expression must contain three elements for simple operations: [number1]",
+                "[operation_symbol] [number2]",
+                "Engineering calculator: [number] [operation_symbol]",
                 "To get a value from memory, use the [m] character",
                 "Enter [q] to exit.");
         String input;
@@ -143,7 +189,7 @@ public class InteractCalc extends Calculator {
      * @param args Arguments.
      */
     public static void main(String[] args) {
-        InteractCalc calc = new InteractCalc();
+        EngCalc calc = new EngCalc();
         calc.init();
     }
 }

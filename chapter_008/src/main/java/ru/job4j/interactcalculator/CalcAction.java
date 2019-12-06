@@ -1,5 +1,7 @@
 package ru.job4j.interactcalculator;
 
+import java.util.Set;
+
 /**
  * Enumeration of calculator actions.
  */
@@ -7,7 +9,10 @@ public enum CalcAction {
     ADD("+"),
     SUBTRACT("-"),
     MULTIPLY("*"),
-    DIVIDE("/");
+    DIVIDE("/"),
+    SIN("sin"),
+    COS("cos"),
+    TG("tg");
 
     private final String symbol;
 
@@ -37,5 +42,13 @@ public enum CalcAction {
             result.append(String.format("[%s]", action.getSymbol()));
         }
         return result.toString();
+    }
+
+    public static Set<CalcAction> getEngSymbols() {
+        return Set.of(
+                CalcAction.SIN,
+                CalcAction.COS,
+                CalcAction.TG
+        );
     }
 }

@@ -6,6 +6,10 @@ import ru.job4j.calculator.Calculator;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+/**
+ * Dispatcher interactive calculator test.
+ * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
+ */
 public class DispatchCalcTest {
     @Test
     public void dispatchAddActionTest() {

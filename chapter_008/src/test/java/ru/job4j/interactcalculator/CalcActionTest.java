@@ -5,6 +5,10 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+/**
+ * Calculator actions enumeration tests.
+ * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
+ */
 public class CalcActionTest {
 
     @Test

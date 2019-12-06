@@ -12,14 +12,14 @@ import java.util.function.Function;
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
 public class DispatchCalc {
-    private final Calculator calculator;
-    private final Double first;
-    private final Double second;
-    private final CalcAction action;
-    private final Map<CalcAction, Function<CalcAction, Double>> dispatch = new HashMap<>();
+    protected Calculator calculator;
+    protected Double first;
+    protected Double second;
+    protected CalcAction action;
+    protected Map<CalcAction, Function<CalcAction, Double>> dispatch = new HashMap<>();
 
     /**
-     * Default constructor.
+     * Constructor.
      * @param calculator Calculator.
      * @param first First number.
      * @param second Second number.
@@ -30,6 +30,10 @@ public class DispatchCalc {
         this.first = first;
         this.second = second;
         this.action = action;
+    }
+
+    public DispatchCalc() {
+
     }
 
     /**

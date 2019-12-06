@@ -6,6 +6,10 @@ import java.io.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
+/**
+ * Interactive calculator tests.
+ * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
+ */
 public class InteractCalcTest {
     @Test
     public void consoleInputTest() {
