@@ -2,7 +2,9 @@ package ru.job4j.foodstorage;
 
 import ru.job4j.foodstorage.food.Food;
 import ru.job4j.foodstorage.storage.IStorage;
+import ru.job4j.foodstorage.storage.ReSort;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * Product quality check.
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
-public class ControlQuality {
+public class ControlQuality implements ReSort {
     private List<IStorage> storageList;
 
     public ControlQuality() {
@@ -70,5 +72,14 @@ public class ControlQuality {
                 }
             }
         }
+    }
+
+    @Override
+    public void reSort(Date currentDate) {
+        List<Food> allFood = new ArrayList<>();
+        for (IStorage storage : storageList) {
+            allFood.addAll(storage.getAllFood());
+        }
+        check(allFood, currentDate);
     }
 }

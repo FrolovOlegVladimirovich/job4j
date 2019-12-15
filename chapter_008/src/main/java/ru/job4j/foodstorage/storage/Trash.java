@@ -2,6 +2,7 @@ package ru.job4j.foodstorage.storage;
 
 import ru.job4j.foodstorage.food.Food;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,10 +38,7 @@ public class Trash implements IStorage {
 
     @Override
     public boolean checkExpiryDate(Food food, Date currentDate) {
-        if (currentDate.compareTo(food.getExpiryDate()) >= 0) {
-            return true;
-        }
-        return false;
+        return currentDate.compareTo(food.getExpiryDate()) >= 0;
     }
 
     @Override
@@ -62,6 +60,13 @@ public class Trash implements IStorage {
                 break;
             }
         }
+        return result;
+    }
+
+    @Override
+    public List<Food> getAllFood() {
+        var result = new ArrayList<>(foodList);
+        foodList.clear();
         return result;
     }
 }

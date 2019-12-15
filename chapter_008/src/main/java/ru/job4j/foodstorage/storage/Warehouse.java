@@ -2,6 +2,7 @@ package ru.job4j.foodstorage.storage;
 
 import ru.job4j.foodstorage.food.Food;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,10 +41,7 @@ public class Warehouse implements IStorage {
         long createDate = food.getCreateDate().getTime();
         long expiryDate = food.getExpiryDate().getTime();
         Date days25per = new Date(createDate + ((expiryDate - createDate) * 25 / 100));
-        if (currentDate.compareTo(days25per) < 0) {
-            return true;
-        }
-        return false;
+        return currentDate.compareTo(days25per) < 0;
     }
 
     @Override
@@ -65,6 +63,13 @@ public class Warehouse implements IStorage {
                 break;
             }
         }
+        return result;
+    }
+
+    @Override
+    public List<Food> getAllFood() {
+        var result = new ArrayList<>(foodList);
+        foodList.clear();
         return result;
     }
 }

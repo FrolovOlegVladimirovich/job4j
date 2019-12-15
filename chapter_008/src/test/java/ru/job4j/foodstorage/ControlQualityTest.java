@@ -123,4 +123,20 @@ public class ControlQualityTest {
         assertThat(expectChocoPrice, is(100D));
         assertThat(expectBeerPrice, is(100D));
     }
+
+
+    @Test
+    public void reSortTest() {
+        Date today = new GregorianCalendar(2019, Calendar.DECEMBER, 15).getTime();
+        Date reSortDay = new GregorianCalendar(2020, Calendar.MARCH, 10).getTime();
+        ControlQuality controlQuality = new ControlQuality(storageList);
+        controlQuality.check(chocolate, today);
+
+        controlQuality.reSort(reSortDay);
+        double expectChocoPrice = shop.getFood("Alpen Gold").getPrice();
+
+
+        assertTrue(shop.containsFood(chocolate));
+        assertThat(expectChocoPrice, is(75D));
+    }
 }

@@ -4,6 +4,7 @@ package ru.job4j.foodstorage.storage;
 import ru.job4j.foodstorage.food.Food;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Methods for the implementation of storage products.
@@ -39,6 +40,11 @@ public interface IStorage {
      * @return Returns the food if it's found, otherwise returns null.
      */
     Food getFood(String name);
+
+    /**
+     * @return food list with removal from the storage.
+     */
+    List<Food> getAllFood();
 
     /**
      * Checks food expiration date.

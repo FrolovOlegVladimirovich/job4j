@@ -2,6 +2,7 @@ package ru.job4j.foodstorage.storage;
 
 import ru.job4j.foodstorage.food.Food;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +73,13 @@ public class Shop implements IStorage {
                 break;
             }
         }
+        return result;
+    }
+
+    @Override
+    public List<Food> getAllFood() {
+        var result = new ArrayList<>(foodList);
+        foodList.clear();
         return result;
     }
 }
