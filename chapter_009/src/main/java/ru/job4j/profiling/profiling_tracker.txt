@@ -1,0 +1,30 @@
+Tracker application profiling.
+
+Virtual Machine: Java HotSpot(TM) 64-Bit Server VM version 12.0.1+12
+
+Operating System: Mac OS X 10.13.6
+Architecture: x86_64
+Number of processors: 4
+
+module chapter_002
+ru.job4j.tracker.StartUI;
+
+G1 Garbage collector.
+
+Instruments:
+- Java Monitoring & Management Console (jconsole):
+- VisualVM + Visual GC plug-in
+
+1) Heap Memory Usage:
+    - Max: 1,1 Gb
+    - G1 Young Generation used up to 40-50 Mb (Eden Space), then performs garbage collector
+    - G1 Young Generation time is 0,134 seconds
+    - G1 Old Generation used 4 Mb of memory during program operation
+    - G1 Old Generation time is 0,000 seconds
+    - G1 Survivor Space used 1 Mb of memory
+
+2) Non-Heap Memory Usage:
+    - Non-Heap Memory used up to 14 Mb of memory
+    - Metaspace Memory Pool used up to 7,7 Mb of memory
+
+3) Number of Loaded Classes: 2 267

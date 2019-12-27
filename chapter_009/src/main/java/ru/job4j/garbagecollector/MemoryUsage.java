@@ -1,5 +1,7 @@
 package ru.job4j.garbagecollector;
 
+import java.util.ArrayList;
+
 /**
  * Демонстрация работы Garbage Collector.
  *
@@ -38,10 +40,12 @@ package ru.job4j.garbagecollector;
  *  VM вызывает GC примерно на 4300 созданных объектах new User("test").
  */
 public class MemoryUsage {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        Thread.sleep(60_000);
+        ArrayList<User> list = new ArrayList<>();
         info();
-        for (int i = 0; i < 4300; i++) {
-            new User("test");
+        for (int i = 0; i < 1_000_000_000; i++) {
+            list.add(new User("test" + i));
             System.out.println(i);
         }
         info();
