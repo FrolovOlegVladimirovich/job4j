@@ -12,7 +12,7 @@ public class RectangleMove implements Runnable {
     @Override
     public void run() {
         int way = 1;
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             if (this.rect.getX() == 290) {
                 way = -1;
             }
@@ -23,7 +23,7 @@ public class RectangleMove implements Runnable {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
