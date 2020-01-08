@@ -37,4 +37,12 @@
     </plugins>
 </build>
 
+    <dependencies>
+        <!-- Java Concurrency In Practice Book Annotations 1.0 -->
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 </project>
