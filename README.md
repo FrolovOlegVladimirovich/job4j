@@ -74,3 +74,15 @@ This repository presents the most interesting projects, that i developed in the 
 - Dependency Inversion Principle.
 - Test Drive Development Principle.
 - Tic Tac Toe game using OOD design.
+
+# Chapter 009. Garbage Collector.
+- A study how work garbage collector.
+- Types of garbage collectors.
+- Profiling.
+- Soft References, cache.
+
+# Chapter 010. Multithreading. Concurrency.
+In progress:
+- Threads.
+- Java Memory Model.
+- Synchronized, volatile.
