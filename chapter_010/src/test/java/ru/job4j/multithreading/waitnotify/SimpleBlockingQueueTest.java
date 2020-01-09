@@ -2,49 +2,47 @@ package ru.job4j.multithreading.waitnotify;
 
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class SimpleBlockingQueueTest {
-    private static final Set<Integer> PRODUCED_ELEMENTS = new HashSet<>();
-    private static final Set<Integer> CONSUMED_ELEMENTS = new HashSet<>();
 
     @Test
-    public void whenProducedElementsToQueueEqualsConsumedElementsFromQueueResultIsTrue() {
-        var queue = new SimpleBlockingQueue<Integer>(10);
-        Thread producer = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
-                try {
-                    queue.offer(i);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+    public void whenProducedElementsToQueueEqualsConsumedElementsFromQueueResultIsTrue() throws InterruptedException {
+        final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(2);
+        Thread producer = new Thread(
+                () -> IntStream.range(0, 5).forEach(
+                        num ->  {
+                            try {
+                                queue.offer(num);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        }
+                )
+        );
+        Thread consumer = new Thread(
+                () -> {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            buffer.add(queue.poll());
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
                 }
-                PRODUCED_ELEMENTS.add(i);
-            }
-        });
-        Thread consumer = new Thread(() -> {
-            int exit = 0;
-            while (exit < 100) {
-                try {
-                    CONSUMED_ELEMENTS.add(queue.poll());
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                exit++;
-            }
-        });
-
-        consumer.start();
+        );
         producer.start();
-        try {
-            consumer.join();
-            producer.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        consumer.start();
+        producer.join();
+        consumer.interrupt();
+        consumer.join();
 
-        assertEquals(PRODUCED_ELEMENTS, CONSUMED_ELEMENTS);
+        assertThat(buffer, is(Arrays.asList(0, 1, 2, 3, 4)));
     }
 }
