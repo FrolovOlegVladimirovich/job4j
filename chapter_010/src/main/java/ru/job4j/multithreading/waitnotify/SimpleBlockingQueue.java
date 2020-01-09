@@ -31,13 +31,9 @@ public class SimpleBlockingQueue<T> {
      * If the queue is busy current thread is waiting for free space.
      * @param value Value.
      */
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (added == size) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            this.wait();
         }
         queue.offer(value);
         ++added;
@@ -49,17 +45,17 @@ public class SimpleBlockingQueue<T> {
      * If the queue is empty, the current thread is waiting for new values.
      * @return value if the queue is not empty.
      */
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (added == 0) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            this.wait();
         }
         var element = queue.poll();
         --added;
         this.notifyAll();
         return element;
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 }

@@ -12,26 +12,38 @@ public class SimpleBlockingQueueTest {
     private static final Set<Integer> CONSUMED_ELEMENTS = new HashSet<>();
 
     @Test
-    public void whenProducedElementsToQueueEqualsConsumedElementsFromQueueResultIsTrue() throws InterruptedException {
+    public void whenProducedElementsToQueueEqualsConsumedElementsFromQueueResultIsTrue() {
         var queue = new SimpleBlockingQueue<Integer>(10);
         Thread producer = new Thread(() -> {
             for (int i = 0; i < 100; i++) {
-                queue.offer(i);
+                try {
+                    queue.offer(i);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 PRODUCED_ELEMENTS.add(i);
             }
         });
         Thread consumer = new Thread(() -> {
             int exit = 0;
             while (exit < 100) {
-                CONSUMED_ELEMENTS.add(queue.poll());
+                try {
+                    CONSUMED_ELEMENTS.add(queue.poll());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 exit++;
             }
         });
 
         consumer.start();
         producer.start();
-        consumer.join();
-        producer.join();
+        try {
+            consumer.join();
+            producer.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         assertEquals(PRODUCED_ELEMENTS, CONSUMED_ELEMENTS);
     }
