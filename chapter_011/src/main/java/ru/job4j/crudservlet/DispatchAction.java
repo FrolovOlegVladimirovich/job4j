@@ -1,5 +1,6 @@
 package ru.job4j.crudservlet;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,15 +12,23 @@ import java.util.function.Function;
 public class DispatchAction {
     private final Map<String, Function<User, String>> dispatch = new HashMap<>();
     private final ValidateService logic = ValidateService.INSTANCE;
+    private static final DispatchAction INSTANCE = new DispatchAction().init();
 
-    public DispatchAction init() {
+    private DispatchAction() {
+    }
+
+    public static DispatchAction getInstance() {
+        return INSTANCE;
+    }
+
+    private DispatchAction init() {
         load("add", toAdd());
         load("update", toUpdate());
         load("delete", toDelete());
         return this;
     }
 
-    public void load(String action, Function<User, String> handle) {
+    private void load(String action, Function<User, String> handle) {
         dispatch.put(action, handle);
     }
 
@@ -27,19 +36,19 @@ public class DispatchAction {
         return dispatch.get(action).apply(model);
     }
 
-    public Function<User, String> toAdd() {
+    private Function<User, String> toAdd() {
         return logic::add;
     }
 
-    public Function<User, String> toUpdate() {
+    private Function<User, String> toUpdate() {
         return logic::update;
     }
 
-    public Function<User, String> toDelete() {
+    private Function<User, String> toDelete() {
         return logic::delete;
     }
 
-    public String toFindAll() {
+    Collection<User> toFindAll() {
         return logic.findAll();
     }
 }

@@ -120,9 +120,9 @@ public enum ValidateService {
     }
 
     /**
-     * @return Response to the servlet with all users found.
+     * @return users collection to the servlet with all found users .
      */
-    public String findAll() {
+    public Collection<User> findAll() {
         return memory.findAll();
     }
 

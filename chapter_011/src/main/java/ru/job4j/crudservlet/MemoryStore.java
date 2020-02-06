@@ -1,5 +1,6 @@
 package ru.job4j.crudservlet;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,10 +32,8 @@ public enum MemoryStore implements Store {
     }
 
     @Override
-    public String findAll() {
-        StringBuilder stringBuilder = new StringBuilder();
-        userMap.values().forEach(user -> stringBuilder.append(user.toString()).append("<br/>"));
-        return stringBuilder.toString();
+    public Collection<User> findAll() {
+        return userMap.values();
     }
 
     @Override

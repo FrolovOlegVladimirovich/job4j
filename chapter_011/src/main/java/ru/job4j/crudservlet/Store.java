@@ -1,5 +1,7 @@
 package ru.job4j.crudservlet;
 
+import java.util.Collection;
+
 /**
  * Database for storing user.
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
@@ -8,7 +10,7 @@ public interface Store {
     void add(User model);
     void update(User model);
     void delete(User model);
-    String findAll();
+    Collection<User> findAll();
     String findById(User model);
     User getUserById(User model);
     boolean containsUser(User model);
