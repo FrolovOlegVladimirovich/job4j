@@ -82,7 +82,23 @@ This repository presents the most interesting projects, that i developed in the 
 - Soft References, cache.
 
 # Chapter 010. Multithreading. Concurrency.
-In progress:
 - Threads.
 - Java Memory Model.
-- Synchronized, volatile.
+- Synchronized, volatile, monitor.
+- Producer Consumer Pattern (wait, notify, notifyAll).
+- java.util.concurrent:
+    - Thread-safe collections.
+    - Thread Pools.
+    - Locks.
+    - Atomic.
+    
+# Chapter 011. Servlet & JSP.
+- Apache Tomcat.
+- HTTP.
+- Client-server application structure.
+- Web application architecture.
+- CRUD Servlet.
+
+In progress:
+- JSP.
+- MVC with Servlet, JSP, JSTL.
