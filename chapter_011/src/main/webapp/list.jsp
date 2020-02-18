@@ -1,5 +1,5 @@
 <%@ page import="ru.job4j.crudservlet.User" %>
-<%@ page import="ru.job4j.crudservlet.MemoryStore" %>
+<%@ page import="ru.job4j.crudservlet.DBStore" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,7 +17,7 @@
         <th>Логин</th>
         <th>Почта</th>
     </tr>
-    <% for (User user : MemoryStore.INSTANCE.findAll()) {%>
+    <% for (User user : DBStore.getINSTANCE().findAll()) {%>
     <tr>
         <td><%=user.getName()%></td>
         <td><%=user.getLogin()%></td>

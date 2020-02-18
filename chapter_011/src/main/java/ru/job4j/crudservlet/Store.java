@@ -7,7 +7,7 @@ import java.util.Collection;
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
 public interface Store {
-    void add(User model);
+    User add(User model);
     void update(User model);
     void delete(User model);
     Collection<User> findAll();

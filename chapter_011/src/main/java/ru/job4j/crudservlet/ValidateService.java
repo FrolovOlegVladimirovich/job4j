@@ -8,7 +8,7 @@ import java.util.*;
  */
 public enum ValidateService {
     INSTANCE;
-    private final Store memory = MemoryStore.INSTANCE;
+    private final Store memory = DBStore.getINSTANCE();
 
     /**
      * Checks model for the presence of empty/null fields name, login, email.
@@ -44,9 +44,9 @@ public enum ValidateService {
                         String.format("User with e-mail \"%s\" already exists. Try a different email.%n", email)
                 );
             } else {
-                memory.add(model);
+                User user = memory.add(model);
                 result.append(
-                        String.format("User %s was successfully created with ID %s.", model.getLogin(), model.getId())
+                        String.format("User %s was successfully created with ID %s.", user.getLogin(), user.getId())
                 );
             }
         }

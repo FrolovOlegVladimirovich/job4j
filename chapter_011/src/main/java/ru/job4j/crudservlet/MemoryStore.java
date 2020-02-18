@@ -15,10 +15,11 @@ public enum MemoryStore implements Store {
     private final Map<String, User> userMap = new ConcurrentHashMap<>();
 
     @Override
-    public void add(User model) {
+    public User add(User model) {
         String id = String.valueOf(idCounter.incrementAndGet());
         model.setId(id);
         userMap.put(model.getId(), model);
+        return model;
     }
 
     @Override
