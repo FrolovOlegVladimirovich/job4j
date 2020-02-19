@@ -1,15 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <html>
 <head>
     <title>Create user</title>
 </head>
 <body>
-<%String message = request.getParameter("message");%>
-<% if (message != null) {%>
-<%=message%><br/><%;
-}%>
+<c:set var="message" value='${requestScope["message"]}' />
+<c:if test="${message != null}">
+    <c:out value="${message}" /><br/>
+</c:if>
 <p>Введите данные нового пользователя</p>
-<form action="<%=request.getContextPath()%>/create" method="post">
+<form action="${pageContext.request.contextPath}/create" method="post">
     <p>Имя:</p><input type='text' name='name'/>
     <p>Логин:</p><input type='text' name='login'/>
     <p>Почта:</p><input type='text' name='email'/>

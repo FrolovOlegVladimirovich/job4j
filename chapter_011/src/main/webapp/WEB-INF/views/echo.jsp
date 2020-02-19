@@ -1,12 +1,11 @@
-<%@ page import="ru.job4j.crudservlet.User" %>
-<%@ page import="ru.job4j.crudservlet.MemoryStore" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <html>
 <head>
     <title>Echo</title>
 </head>
 <body>
-<form action="<%=request.getContextPath()%>/echo" method="post">
+<form action="${pageContext.request.contextPath}/echo" method="post">
     Login: <input type="text" name="login"><br/>
     Email: <input type="text" name="email"><br/>
     <input type="submit">
@@ -17,12 +16,12 @@
         <th>Логин</th>
         <th>Почта</th>
     </tr>
-    <% for (User user : MemoryStore.INSTANCE.findAll()) {%>
-    <tr>
-        <td><%=user.getLogin()%></td>
-        <td><%=user.getEmail()%></td>
-    </tr>
-    <% } %>
+    <c:forEach items="${users}" var="user">
+        <tr>
+            <td><c:out value="${user.login}" /></td>
+            <td><c:out value="${user.email}" /></td>
+        </tr>
+    </c:forEach>
 </table>
 </body>
 </html>
