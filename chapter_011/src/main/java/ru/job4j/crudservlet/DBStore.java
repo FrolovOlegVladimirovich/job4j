@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,13 +37,15 @@ public class DBStore implements Store {
         String login = model.getLogin();
         String name = model.getName();
         String email = model.getEmail();
+        String photoId = model.getPhotoId();
         long time = model.getCreateDate().getTime();
         try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, login, email, createdate) VALUES (?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, login, email, createdate, photo_id) VALUES (?, ?, ?, ?, ?)");
             statement.setString(1, name);
             statement.setString(2, login);
             statement.setString(3, email);
             statement.setTimestamp(4, new Timestamp(time));
+            statement.setString(5, photoId);
             statement.execute();
             PreparedStatement selectStatement = connection.prepareStatement("SELECT id FROM users WHERE name = ? AND login = ? AND email = ?");
             selectStatement.setString(1, name);
@@ -77,11 +80,14 @@ public class DBStore implements Store {
 
     @Override
     public void delete(User model) {
+        String photoId = getUserById(model).getPhotoId();
         try (Connection connection = SOURCE.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
             statement.setInt(1, Integer.parseInt(model.getId()));
             statement.execute();
             statement.close();
+            File file = new File("images" + File.separator + photoId);
+            file.delete();
             LOG.info("Deleted user from database");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
@@ -101,6 +107,7 @@ public class DBStore implements Store {
                 user.setLogin(resultSet.getString("login"));
                 user.setEmail(resultSet.getString("email"));
                 user.setCreateDate(resultSet.getTimestamp("createdate"));
+                user.setPhotoId(resultSet.getString("photo_id"));
                 result.add(user);
             }
             resultSet.close();
@@ -131,6 +138,7 @@ public class DBStore implements Store {
                 result.setLogin(resultSet.getString("login"));
                 result.setEmail(resultSet.getString("email"));
                 result.setCreateDate(resultSet.getTimestamp("createdate"));
+                result.setPhotoId(resultSet.getString("photo_id"));
             }
             resultSet.close();
             statement.close();

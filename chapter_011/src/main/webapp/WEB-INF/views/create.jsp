@@ -10,10 +10,11 @@
     <c:out value="${message}" /><br/>
 </c:if>
 <p>Введите данные нового пользователя</p>
-<form action="${pageContext.request.contextPath}/create" method="post">
+<form action="${pageContext.request.contextPath}/create" method="post" enctype="multipart/form-data">
     <p>Имя:</p><input type='text' name='name'/>
     <p>Логин:</p><input type='text' name='login'/>
     <p>Почта:</p><input type='text' name='email'/>
+    <p>Фото:</p><input type="file" name="file"/>
     <p><input type='submit'/></p>
 </form>
 </body>

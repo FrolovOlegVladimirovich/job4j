@@ -15,12 +15,21 @@
         <th>Имя</th>
         <th>Логин</th>
         <th>Почта</th>
+        <th>Фото</th>
     </tr>
     <c:forEach items="${users}" var="user">
         <tr>
             <td><c:out value="${user.name}" /></td>
             <td><c:out value="${user.login}" /></td>
             <td><c:out value="${user.email}" /></td>
+            <td>
+                <img src="${pageContext.servletContext.contextPath}/download?name=${user.photoId}" width="100px" height="100px"/>
+            </td>
+            <td>
+                <form action="${pageContext.servletContext.contextPath}/download?name=${user.photoId}" method="post">
+                    <input type="submit" value="Скачать фото">
+                </form>
+            </td>
             <td>
                 <form action="${pageContext.request.contextPath}/edit" method="post">
                     <input type="hidden" name="id" value="<c:out value="${user.id}" />">
@@ -32,6 +41,7 @@
             <td>
                 <form action="${pageContext.request.contextPath}/edit" method="post">
                     <input type="hidden" name="id" value="<c:out value="${user.id}" />">
+                    <input type="hidden" name="photoId" value="<c:out value="${user.photoId}" />">
                     <input type="hidden" name="action" value="delete">
                     <input type="submit" value="Удалить">
                 </form>

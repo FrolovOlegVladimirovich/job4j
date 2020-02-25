@@ -42,4 +42,24 @@
         <servlet-name>Users Update Controller Servlet</servlet-name>
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Upload Controller Servlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.UploadController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Upload Controller Servlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Download Controller Servlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.DownloadController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Download Controller Servlet</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
 </web-app>

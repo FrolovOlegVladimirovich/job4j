@@ -13,6 +13,7 @@ public class User {
     private String login;
     private String email;
     private Date createDate;
+    private String photoId;
 
     public User() {
     }
@@ -55,6 +56,14 @@ public class User {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(String photoId) {
+        this.photoId = photoId;
     }
 
     @Override

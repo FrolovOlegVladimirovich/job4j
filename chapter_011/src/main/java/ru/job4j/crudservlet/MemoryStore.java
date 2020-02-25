@@ -1,5 +1,6 @@
 package ru.job4j.crudservlet;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +30,10 @@ public enum MemoryStore implements Store {
 
     @Override
     public void delete(User model) {
+        String photoId = getUserById(model).getPhotoId();
         userMap.remove(model.getId());
+        File file = new File("images" + File.separator + photoId);
+        file.delete();
     }
 
     @Override

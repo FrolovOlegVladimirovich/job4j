@@ -4,6 +4,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -28,6 +29,8 @@ public class UsersUpdateController extends HttpServlet {
             model.setId(req.getParameter("id"));
             model.setName(req.getParameter("name"));
             req.setAttribute("message", dispatchAction.toDo(action, model));
+            String path = new File("images").getAbsolutePath() + File.separator + req.getParameter("photoId");
+            new File(path).delete();
             req.setAttribute("users", DBStore.getINSTANCE().findAll());
             req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
         } else if ("updateView".equals(action)) {

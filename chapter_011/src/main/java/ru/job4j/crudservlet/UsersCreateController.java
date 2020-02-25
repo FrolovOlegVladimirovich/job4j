@@ -1,17 +1,27 @@
 package ru.job4j.crudservlet;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Date;
+import java.io.*;
+import java.util.*;
 
 /**
  * Servlet to create users in the database.
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
 public class UsersCreateController extends HttpServlet {
+    private static final Logger LOG = LogManager.getLogger(UsersCreateController.class.getName());
     private final DispatchAction dispatchAction = DispatchAction.getInstance();
 
     @Override
@@ -23,12 +33,70 @@ public class UsersCreateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.setContentType("text/html");
+        Map<String, FileItem> items = parse(req);
         User model = new User();
-        model.setName(req.getParameter("name"));
-        model.setLogin(req.getParameter("login"));
-        model.setEmail(req.getParameter("email"));
+        FileItem image = items.get("image");
+        model.setName(items.get("name").getString());
+        model.setLogin(items.get("login").getString());
+        model.setEmail(items.get("email").getString());
         model.setCreateDate(new Date());
-        req.setAttribute("message", dispatchAction.toDo("add", model));
+        String photoId;
+        if ("".equals(image.getName())) {
+            photoId = "";
+        } else {
+            String extension = "." + FilenameUtils.getExtension(image.getName());
+            photoId = image.getName().replace(extension, String.valueOf(model.hashCode())) + extension;
+        }
+        model.setPhotoId(photoId);
+        String addResult = dispatchAction.toDo("add", model);
+        req.setAttribute("message", addResult);
+        if (addResult.contains("successfully")) {
+            saveImage(photoId, image);
+        }
         doGet(req, resp);
+    }
+
+    /**
+     * Saves the user's image on the server.
+     * @param name Unique image name.
+     * @param image FileItem image.
+     */
+    private void saveImage(String name, FileItem image) {
+        File folder = new File("images");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        File file = new File(folder + File.separator + name);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            out.write(image.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            LOG.error("Error saving file on server");
+        }
+    }
+
+    /**
+     * Parses a request for parameter names and values.
+     * @param req Request.
+     * @return Map of parameter names and values.
+     */
+    private Map<String, FileItem> parse(HttpServletRequest req) {
+        Map<String, FileItem> parameters = new HashMap<>();
+        DiskFileItemFactory factory = new DiskFileItemFactory();
+        ServletContext servletContext = this.getServletConfig().getServletContext();
+        File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+        factory.setRepository(repository);
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        try {
+            for (FileItem item : upload.parseRequest(req)) {
+                if (item.isFormField()) {
+                    parameters.put(item.getFieldName(), item);
+                } else {
+                    parameters.put("image", item);
+                }
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
+        return parameters;
     }
 }

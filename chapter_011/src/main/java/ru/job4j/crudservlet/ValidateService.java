@@ -21,12 +21,14 @@ public enum ValidateService {
         String name = model.getName();
         String login = model.getLogin();
         String email = model.getEmail();
+        String photoId = model.getPhotoId();
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         values.put("login", login);
         values.put("email", email);
+        values.put("photo", photoId);
         if (values.containsValue(null) || values.containsValue("")) {
-            result.append("Unable to register user. Required fields: name, login, email. Empty fields:");
+            result.append("Unable to register user. Required fields: name, login, email, photo. Empty fields:");
             values.forEach(
                     (key, value) -> {
                         if (value == null || "".equals(value)) {
