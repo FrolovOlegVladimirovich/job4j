@@ -67,4 +67,22 @@ public enum MemoryStore implements Store {
         return userMap.values().stream().anyMatch(user ->
                 model.getEmail().equals(user.getEmail()));
     }
+
+    @Override
+    public User isCredential(User model) {
+        User user = null;
+        String login = model.getLogin();
+        String password = model.getPassword();
+        for (User u : userMap.values()) {
+            if (login.equals(u.getLogin()) && password.equals(u.getPassword())) {
+                user = new User();
+                user.setId(u.getId());
+                user.setRole(u.getRole());
+                user.setName(u.getName());
+                user.setLogin(login);
+                break;
+            }
+        }
+        return user;
+    }
 }

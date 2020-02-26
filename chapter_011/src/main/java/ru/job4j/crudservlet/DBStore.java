@@ -34,29 +34,23 @@ public class DBStore implements Store {
 
     @Override
     public User add(User model) {
-        String login = model.getLogin();
-        String name = model.getName();
-        String email = model.getEmail();
-        String photoId = model.getPhotoId();
-        long time = model.getCreateDate().getTime();
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name, login, email, createdate, photo_id) VALUES (?, ?, ?, ?, ?)");
-            statement.setString(1, name);
-            statement.setString(2, login);
-            statement.setString(3, email);
-            statement.setTimestamp(4, new Timestamp(time));
-            statement.setString(5, photoId);
-            statement.execute();
-            PreparedStatement selectStatement = connection.prepareStatement("SELECT id FROM users WHERE name = ? AND login = ? AND email = ?");
-            selectStatement.setString(1, name);
-            selectStatement.setString(2, login);
-            selectStatement.setString(3, email);
-            ResultSet resultSet = selectStatement.executeQuery();
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(String.format("%s %s",
+                     "INSERT INTO users (name, login, email, createdate, photo_id, password, role_id)",
+                     "VALUES (?, ?, ?, ?, ?, ?, (SELECT id FROM user_role WHERE name = ?)) RETURNING id")
+             )
+        ) {
+            statement.setString(1, model.getName());
+            statement.setString(2, model.getLogin());
+            statement.setString(3, model.getEmail());
+            statement.setTimestamp(4, new Timestamp(model.getCreateDate().getTime()));
+            statement.setString(5, model.getPhotoId());
+            statement.setString(6, model.getPassword());
+            statement.setString(7, model.getRole());
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 model.setId(String.valueOf(resultSet.getInt("id")));
             }
-            statement.close();
-            selectStatement.close();
             LOG.info("Added user to database");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
@@ -66,13 +60,15 @@ public class DBStore implements Store {
 
     @Override
     public void update(User model) {
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE users SET name = ? WHERE id = ?");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE users SET name = ?, role_id = (SELECT id FROM user_role WHERE name = ?) WHERE id = ?")
+        ) {
             statement.setString(1, model.getName());
-            statement.setInt(2, Integer.parseInt(model.getId()));
+            statement.setString(2, model.getRole());
+            statement.setInt(3, Integer.parseInt(model.getId()));
             statement.execute();
-            statement.close();
-            LOG.info("Updated user in database");
+            LOG.info("Updated user in the data base");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
         }
@@ -81,11 +77,11 @@ public class DBStore implements Store {
     @Override
     public void delete(User model) {
         String photoId = getUserById(model).getPhotoId();
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?")
+        ) {
             statement.setInt(1, Integer.parseInt(model.getId()));
             statement.execute();
-            statement.close();
             File file = new File("images" + File.separator + photoId);
             file.delete();
             LOG.info("Deleted user from database");
@@ -97,8 +93,14 @@ public class DBStore implements Store {
     @Override
     public Collection<User> findAll() {
         Collection<User> result = new ArrayList<>();
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(String.format(
+                     "%s %s",
+                     "select u.id, u.name, u.login, u.email, u.createdate, u.photo_id, r.name from users as u",
+                     "inner join user_role as r on u.role_id = r.id"
+                     )
+             )
+        ) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
@@ -108,10 +110,9 @@ public class DBStore implements Store {
                 user.setEmail(resultSet.getString("email"));
                 user.setCreateDate(resultSet.getTimestamp("createdate"));
                 user.setPhotoId(resultSet.getString("photo_id"));
+                user.setRole(resultSet.getString(7));
                 result.add(user);
             }
-            resultSet.close();
-            statement.close();
             LOG.info("Found all users in the database");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
@@ -127,8 +128,9 @@ public class DBStore implements Store {
     @Override
     public User getUserById(User model) {
         User result = null;
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")
+        ) {
             statement.setInt(1, Integer.parseInt(model.getId()));
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -140,8 +142,6 @@ public class DBStore implements Store {
                 result.setCreateDate(resultSet.getTimestamp("createdate"));
                 result.setPhotoId(resultSet.getString("photo_id"));
             }
-            resultSet.close();
-            statement.close();
             LOG.info("Found user by id in the database");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
@@ -157,13 +157,12 @@ public class DBStore implements Store {
     @Override
     public boolean containsLogin(User model) {
         boolean result = false;
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE login = ?");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE login = ?")
+        ) {
             statement.setString(1, model.getLogin());
             ResultSet resultSet = statement.executeQuery();
             result = resultSet.next();
-            resultSet.close();
-            statement.close();
             LOG.info("Checked user availability in the database by login");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
@@ -174,17 +173,45 @@ public class DBStore implements Store {
     @Override
     public boolean containsEmail(User model) {
         boolean result = false;
-        try (Connection connection = SOURCE.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE email = ?");
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE email = ?")
+        ) {
             statement.setString(1, model.getEmail());
             ResultSet resultSet = statement.executeQuery();
             result = resultSet.next();
-            resultSet.close();
-            statement.close();
             LOG.info("Checked user availability in the database by email");
         } catch (SQLException e) {
             LOG.error("Database access error", e.fillInStackTrace());
         }
         return result;
+    }
+
+    @Override
+    public User isCredential(User model) {
+        User user = null;
+        String login = model.getLogin();
+        String password = model.getPassword();
+        try (Connection connection = SOURCE.getConnection();
+             PreparedStatement statement = connection.prepareStatement(String.format(
+                     "%s %s",
+                     "SELECT u.id, u.name, r.name FROM users AS u INNER JOIN user_role AS r",
+                     "ON u.role_id = r.id WHERE u.login = ? AND u.password = ?"
+                     )
+             )
+        ) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                user = new User();
+                user.setId(String.valueOf(resultSet.getInt(1)));
+                user.setName(resultSet.getString(2));
+                user.setRole(String.valueOf(resultSet.getString(3)));
+                user.setLogin(login);
+            }
+        } catch (SQLException e) {
+            LOG.error("Database access error", e.fillInStackTrace());
+        }
+        return user;
     }
 }

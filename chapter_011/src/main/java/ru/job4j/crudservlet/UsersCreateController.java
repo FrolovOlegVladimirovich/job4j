@@ -31,7 +31,7 @@ public class UsersCreateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
         Map<String, FileItem> items = parse(req);
         User model = new User();
@@ -39,6 +39,8 @@ public class UsersCreateController extends HttpServlet {
         model.setName(items.get("name").getString());
         model.setLogin(items.get("login").getString());
         model.setEmail(items.get("email").getString());
+        model.setPassword(items.get("password").getString());
+        model.setRole(items.get("role").getString());
         model.setCreateDate(new Date());
         String photoId;
         if ("".equals(image.getName())) {
@@ -49,11 +51,11 @@ public class UsersCreateController extends HttpServlet {
         }
         model.setPhotoId(photoId);
         String addResult = dispatchAction.toDo("add", model);
-        req.setAttribute("message", addResult);
+        LOG.info(addResult);
         if (addResult.contains("successfully")) {
             saveImage(photoId, image);
         }
-        doGet(req, resp);
+        resp.sendRedirect(req.getContextPath());
     }
 
     /**

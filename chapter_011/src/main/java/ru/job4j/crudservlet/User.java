@@ -14,6 +14,8 @@ public class User {
     private String email;
     private Date createDate;
     private String photoId;
+    private String password;
+    private String role;
 
     public User() {
     }
@@ -64,6 +66,22 @@ public class User {
 
     public void setPhotoId(String photoId) {
         this.photoId = photoId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

@@ -62,4 +62,40 @@
         <servlet-name>Download Controller Servlet</servlet-name>
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SignIn Controller Servlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.SignInController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignIn Controller Servlet</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogOut Controller Servlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.LogOutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogOut Controller Servlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>Authorization Filter</filter-name>
+        <filter-class>ru.job4j.crudservlet.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Authorization Filter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>Role Filter</filter-name>
+        <filter-class>ru.job4j.crudservlet.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Role Filter</filter-name>
+        <url-pattern>/create</url-pattern>
+    </filter-mapping>
 </web-app>

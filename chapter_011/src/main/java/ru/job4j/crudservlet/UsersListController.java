@@ -11,11 +11,12 @@ import java.io.IOException;
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
 public class UsersListController extends HttpServlet {
+    private final DispatchAction dispatchAction = DispatchAction.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.setContentType("text/html");
-        req.setAttribute("users", DBStore.getINSTANCE().findAll());
+        req.setAttribute("users", dispatchAction.toFindAll());
         req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
     }
 }

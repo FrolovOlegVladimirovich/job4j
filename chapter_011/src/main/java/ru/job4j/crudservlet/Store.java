@@ -16,4 +16,5 @@ public interface Store {
     boolean containsUser(User model);
     boolean containsLogin(User model);
     boolean containsEmail(User model);
+    User isCredential(User model);
 }

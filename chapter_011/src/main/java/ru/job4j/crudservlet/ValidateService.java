@@ -22,13 +22,17 @@ public enum ValidateService {
         String login = model.getLogin();
         String email = model.getEmail();
         String photoId = model.getPhotoId();
+        String password = model.getPassword();
+        String role = model.getRole();
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         values.put("login", login);
         values.put("email", email);
         values.put("photo", photoId);
+        values.put("password", password);
+        values.put("role", role);
         if (values.containsValue(null) || values.containsValue("")) {
-            result.append("Unable to register user. Required fields: name, login, email, photo. Empty fields:");
+            result.append("Unable to register user. Empty fields:");
             values.forEach(
                     (key, value) -> {
                         if (value == null || "".equals(value)) {
@@ -65,9 +69,11 @@ public enum ValidateService {
         StringBuilder result = new StringBuilder();
         String id = model.getId();
         String name = model.getName();
+        String role = model.getRole();
         Map<String, String> values = new HashMap<>();
         values.put("id", id);
         values.put("name", name);
+        values.put("role", role);
         if (values.containsValue(null) || values.containsValue("")) {
             result.append("Unable to update user. Required fields: id, name. Empty fields:");
             values.forEach(
@@ -80,14 +86,7 @@ public enum ValidateService {
         } else {
             User user = memory.getUserById(model);
             if (user != null) {
-                if (!name.equals(user.getName())) {
-                    memory.update(model);
-                    result.append(
-                            String.format("User ID %s was successfully changed name to %s.", id, name)
-                    );
-                } else {
-                    result.append("User names are the same. Try a different name.");
-                }
+                memory.update(model);
             } else {
                 result.append(
                         String.format("User with ID %s doesn't exist. Try another id.", id)
