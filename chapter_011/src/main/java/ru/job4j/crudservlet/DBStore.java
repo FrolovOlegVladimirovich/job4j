@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 public class DBStore implements Store {
     private static final BasicDataSource SOURCE = new BasicDataSource();
-    private static final DBStore INSTANCE = new DBStore();
+    private static final Store INSTANCE = new DBStore();
     private static final Logger LOG = LogManager.getLogger(DBStore.class.getName());
 
     private DBStore() {
@@ -28,7 +28,7 @@ public class DBStore implements Store {
         SOURCE.setMaxOpenPreparedStatements(100);
     }
 
-    public static DBStore getINSTANCE() {
+    public static Store getINSTANCE() {
         return INSTANCE;
     }
 
