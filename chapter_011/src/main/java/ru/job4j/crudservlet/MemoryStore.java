@@ -14,6 +14,7 @@ public enum MemoryStore implements Store {
     INSTANCE;
     private final AtomicInteger idCounter = new AtomicInteger();
     private final Map<String, User> userMap = new ConcurrentHashMap<>();
+    private final Map<String, Collection<String>> locations = new ConcurrentHashMap<>();
 
     @Override
     public User add(User model) {
@@ -39,6 +40,11 @@ public enum MemoryStore implements Store {
     @Override
     public Collection<User> findAll() {
         return userMap.values();
+    }
+
+    @Override
+    public Map<String, Collection<String>> findLocations() {
+        return locations;
     }
 
     @Override

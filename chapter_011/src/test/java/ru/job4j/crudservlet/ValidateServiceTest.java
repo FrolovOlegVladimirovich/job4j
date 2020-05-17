@@ -17,7 +17,8 @@ public class ValidateServiceTest {
         user.setLogin("Login");
 
         String result = validateService.add(user);
-        String expect = String.format("Unable to register user. Required fields: name, login, email. Empty fields:%nemail");
+        String expect = String.format("Unable to register user. Required fields:"
+                + " name, login, email. Empty fields:%nemail");
 
         assertThat(result, is(expect));
     }
@@ -30,7 +31,8 @@ public class ValidateServiceTest {
         user.setEmail("");
 
         String result = validateService.add(user);
-        String expect = String.format("Unable to register user. Required fields: name, login, email. Empty fields:%nemail");
+        String expect = String.format("Unable to register user. Required fields:"
+                + " name, login, email. Empty fields:%nemail");
 
         assertThat(result, is(expect));
     }
@@ -49,7 +51,8 @@ public class ValidateServiceTest {
 
         validateService.add(user1);
         String result = validateService.add(user2);
-        String expect = String.format("User with login \"%s\" already exists. Try a different login.%n", login);
+        String expect = String.format("User with login \"%s\" already exists."
+                + " Try a different login.%n", login);
         validateService.delete(user1);
 
         assertThat(result, is(expect));
@@ -69,7 +72,8 @@ public class ValidateServiceTest {
 
         validateService.add(user1);
         String result = validateService.add(user2);
-        String expect = String.format("User with e-mail \"%s\" already exists. Try a different email.%n", email);
+        String expect = String.format("User with e-mail \"%s\" already exists. "
+                + "Try a different email.%n", email);
         validateService.delete(user1);
 
         assertThat(result, is(expect));
@@ -84,7 +88,8 @@ public class ValidateServiceTest {
         user.setEmail("testmail@mail.com");
 
         String result = validateService.add(user);
-        String expect = String.format("User %s was successfully created with ID %s.", login, user.getId());
+        String expect = String.format("User %s was successfully created with ID %s.",
+                login, user.getId());
         validateService.delete(user);
 
         assertThat(result, is(expect));
@@ -101,7 +106,8 @@ public class ValidateServiceTest {
         model.setId(user1.getId());
 
         String result = validateService.update(model);
-        String expect = String.format("Unable to update user. Required fields: id, name. Empty fields:%nname");
+        String expect = String.format("Unable to update user. Required fields: "
+                + "id, name. Empty fields:%nname");
         validateService.delete(user1);
 
         assertThat(result, is(expect));
@@ -119,7 +125,8 @@ public class ValidateServiceTest {
         model.setName("");
 
         String result = validateService.update(model);
-        String expect = String.format("Unable to update user. Required fields: id, name. Empty fields:%nname");
+        String expect = String.format("Unable to update user. Required fields:"
+                + " id, name. Empty fields:%nname");
         validateService.delete(user1);
 
         assertThat(result, is(expect));
@@ -138,7 +145,8 @@ public class ValidateServiceTest {
         model.setName(newName);
 
         String result = validateService.update(model);
-        String expect = String.format("User ID %s was successfully changed name to %s.", user1.getId(), newName);
+        String expect = String.format("User ID %s was successfully changed name to %s.",
+                user1.getId(), newName);
         validateService.delete(user1);
 
         assertThat(result, is(expect));
@@ -170,7 +178,8 @@ public class ValidateServiceTest {
         model.setName("NewName");
 
         String result = validateService.update(model);
-        String expect = String.format("User with ID %s doesn't exist. Try another id.", model.getId());
+        String expect = String.format("User with ID %s doesn't exist. Try another id.",
+                model.getId());
 
         assertThat(result, is(expect));
     }
@@ -202,7 +211,8 @@ public class ValidateServiceTest {
         model.setId("100500");
 
         String result = validateService.delete(model);
-        String expect = String.format("User with ID %s doesn't exist. Try another id.", model.getId());
+        String expect = String.format("User with ID %s doesn't exist. Try another id.",
+                model.getId());
 
         assertThat(result, is(expect));
     }
@@ -250,7 +260,8 @@ public class ValidateServiceTest {
         model.setId("100500");
 
         String result = validateService.findById(model);
-        String expect = String.format("User with ID %s doesn't exist. Try another id.", model.getId());
+        String expect = String.format("User with ID %s doesn't exist. Try another id.",
+                model.getId());
 
         assertThat(result, is(expect));
     }

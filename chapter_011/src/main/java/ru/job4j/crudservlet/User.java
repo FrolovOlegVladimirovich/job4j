@@ -16,6 +16,8 @@ public class User {
     private String photoId;
     private String password;
     private String role;
+    private String city;
+    private String country;
 
     public User() {
     }
@@ -82,6 +84,22 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     @Override

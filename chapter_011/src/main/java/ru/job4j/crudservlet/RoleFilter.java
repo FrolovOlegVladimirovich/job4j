@@ -12,7 +12,8 @@ public class RoleFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+            throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         User model = (User) request.getSession().getAttribute("model");
         if ("admin".equals(model.getRole())) {

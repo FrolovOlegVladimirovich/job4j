@@ -14,14 +14,16 @@ public class EchoController extends HttpServlet {
     private final Store memory = MemoryStore.INSTANCE;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
         req.setAttribute("users", memory.findAll());
         req.getRequestDispatcher("/WEB-INF/views/echo.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
         resp.setContentType("text/html;charset=UTF-8");
         User user = new User();
         user.setLogin(req.getParameter("login"));

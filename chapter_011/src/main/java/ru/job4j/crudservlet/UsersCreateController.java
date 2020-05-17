@@ -1,20 +1,22 @@
 package ru.job4j.crudservlet;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
+import ru.job4j.util.Util;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Servlet to create users in the database.
@@ -25,15 +27,18 @@ public class UsersCreateController extends HttpServlet {
     private final DispatchAction dispatchAction = DispatchAction.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
         resp.setContentType("text/html");
         req.getRequestDispatcher("/WEB-INF/views/create.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/html");
-        Map<String, FileItem> items = parse(req);
+        PrintWriter writer = new PrintWriter(resp.getOutputStream());
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        Map<String, FileItem> items = Util.getInstance().parse(this, req);
         User model = new User();
         FileItem image = items.get("image");
         model.setName(items.get("name").getString());
@@ -42,20 +47,31 @@ public class UsersCreateController extends HttpServlet {
         model.setPassword(items.get("password").getString());
         model.setRole(items.get("role").getString());
         model.setCreateDate(new Date());
+        model.setCountry(items.get("country").getString());
+        model.setCity(items.get("city").getString());
         String photoId;
         if ("".equals(image.getName())) {
             photoId = "";
         } else {
             String extension = "." + FilenameUtils.getExtension(image.getName());
-            photoId = image.getName().replace(extension, String.valueOf(model.hashCode())) + extension;
+            photoId = image.getName().replace(extension, String.valueOf(model.hashCode()))
+                    + extension;
         }
         model.setPhotoId(photoId);
         String addResult = dispatchAction.toDo("add", model);
+        boolean result = false;
         LOG.info(addResult);
+        JSONObject json = new JSONObject();
         if (addResult.contains("successfully")) {
             saveImage(photoId, image);
+            result = true;
+            String id = addResult.split("ID ")[1];
+            json.put("id", id.substring(0, id.length() - 1));
+            json.put("pic", photoId);
         }
-        resp.sendRedirect(req.getContextPath());
+        json.put("result", result);
+        writer.append(json.toString());
+        writer.flush();
     }
 
     /**
@@ -74,31 +90,5 @@ public class UsersCreateController extends HttpServlet {
         } catch (IOException e) {
             LOG.error("Error saving file on server");
         }
-    }
-
-    /**
-     * Parses a request for parameter names and values.
-     * @param req Request.
-     * @return Map of parameter names and values.
-     */
-    private Map<String, FileItem> parse(HttpServletRequest req) {
-        Map<String, FileItem> parameters = new HashMap<>();
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        ServletContext servletContext = this.getServletConfig().getServletContext();
-        File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-        factory.setRepository(repository);
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        try {
-            for (FileItem item : upload.parseRequest(req)) {
-                if (item.isFormField()) {
-                    parameters.put(item.getFieldName(), item);
-                } else {
-                    parameters.put("image", item);
-                }
-            }
-        } catch (FileUploadException e) {
-            e.printStackTrace();
-        }
-        return parameters;
     }
 }

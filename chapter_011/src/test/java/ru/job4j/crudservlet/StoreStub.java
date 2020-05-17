@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class StoreStub implements Store {
     private final Map<String, User> store = new HashMap<>();
+    private final Map<String, Collection<String>> locations = new HashMap<>();
 
     @Override
     public User add(User model) {
@@ -27,6 +28,11 @@ public class StoreStub implements Store {
     @Override
     public Collection<User> findAll() {
         return store.values();
+    }
+
+    @Override
+    public Map<String, Collection<String>> findLocations() {
+        return locations;
     }
 
     @Override

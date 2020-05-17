@@ -10,9 +10,9 @@ import java.util.function.Function;
  * @author Oleg Frolov (frolovolegvladimirovich@gmail.com)
  */
 public class DispatchAction {
+    private static final DispatchAction INSTANCE = new DispatchAction().init();
     private final Map<String, Function<User, String>> dispatch = new HashMap<>();
     private final ValidateService logic = ValidateService.INSTANCE;
-    private static final DispatchAction INSTANCE = new DispatchAction().init();
 
     private DispatchAction() {
     }
@@ -50,5 +50,9 @@ public class DispatchAction {
 
     Collection<User> toFindAll() {
         return logic.findAll();
+    }
+
+    Map<String, Collection<String>> toFindLocations() {
+        return logic.findLocations();
     }
 }

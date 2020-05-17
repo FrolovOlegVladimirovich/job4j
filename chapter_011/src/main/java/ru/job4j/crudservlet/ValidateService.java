@@ -24,6 +24,8 @@ public enum ValidateService {
         String photoId = model.getPhotoId();
         String password = model.getPassword();
         String role = model.getRole();
+        String country = model.getCountry();
+        String city = model.getCity();
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         values.put("login", login);
@@ -31,6 +33,8 @@ public enum ValidateService {
         values.put("photo", photoId);
         values.put("password", password);
         values.put("role", role);
+        values.put("country", country);
+        values.put("city", city);
         if (values.containsValue(null) || values.containsValue("")) {
             result.append("Unable to register user. Empty fields:");
             values.forEach(
@@ -43,16 +47,21 @@ public enum ValidateService {
         } else {
             if (memory.containsLogin(model)) {
                 result.append(
-                        String.format("User with login \"%s\" already exists. Try a different login.%n", login)
+                        String.format("User with login \"%s\" already exists."
+                                        + " Try a different login.%n",
+                                login)
                 );
             } else if (memory.containsEmail(model)) {
                 result.append(
-                        String.format("User with e-mail \"%s\" already exists. Try a different email.%n", email)
+                        String.format("User with e-mail \"%s\" already exists."
+                                        + " Try a different email.%n",
+                                email)
                 );
             } else {
                 User user = memory.add(model);
                 result.append(
-                        String.format("User %s was successfully created with ID %s.", user.getLogin(), user.getId())
+                        String.format("User %s was successfully created with ID %s.",
+                                user.getLogin(), user.getId())
                 );
             }
         }
@@ -70,10 +79,14 @@ public enum ValidateService {
         String id = model.getId();
         String name = model.getName();
         String role = model.getRole();
+        String country = model.getCountry();
+        String city = model.getCity();
         Map<String, String> values = new HashMap<>();
         values.put("id", id);
         values.put("name", name);
         values.put("role", role);
+        values.put("country", country);
+        values.put("city", city);
         if (values.containsValue(null) || values.containsValue("")) {
             result.append("Unable to update user. Required fields: id, name. Empty fields:");
             values.forEach(
@@ -87,6 +100,9 @@ public enum ValidateService {
             User user = memory.getUserById(model);
             if (user != null) {
                 memory.update(model);
+                result.append(
+                        String.format("User with ID %s was successfully updated.", id)
+                );
             } else {
                 result.append(
                         String.format("User with ID %s doesn't exist. Try another id.", id)
@@ -125,6 +141,10 @@ public enum ValidateService {
      */
     public Collection<User> findAll() {
         return memory.findAll();
+    }
+
+    Map<String, Collection<String>> findLocations() {
+        return memory.findLocations();
     }
 
     /**
